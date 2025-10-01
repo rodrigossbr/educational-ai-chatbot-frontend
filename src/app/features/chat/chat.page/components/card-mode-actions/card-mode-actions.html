@@ -1,0 +1,6 @@
+<button [ngClass]="{ 'selected': mode === 'voice'  }" matButton="outlined" (click)="selectMode('voice')">Voz</button>
+<button [ngClass]="{ 'selected': mode === 'text'  }" matButton="outlined" (click)="selectMode('text')">Texto
+  simplificado
+</button>
+<button [ngClass]="{ 'selected': mode === 'libras'  }" matButton="outlined" (click)="selectMode('libras')">Libras
+</button>

@@ -1,3 +1,7 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
+import {ChatPage} from './features/chat/chat.page/chat.page';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {path: '', pathMatch: 'full', redirectTo: 'chat'},
+  {path: 'chat', component: ChatPage},
+];

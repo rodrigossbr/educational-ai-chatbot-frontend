@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+
+  button {
+    height: 34px;
+
+    &.selected {
+      background-color: lightblue;
+    }
+  }
+}

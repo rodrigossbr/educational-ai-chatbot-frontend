@@ -1,0 +1,25 @@
+<mat-card class="chat-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Chatboot inclusivo</mat-card-title>
+    <div class="chat-card-header-actions">
+      <button class="help-button" matButton="outlined">
+        <mat-icon class="material-symbols-outlined">help</mat-icon>
+      </button>
+      <button matButton="outlined">
+        <mat-icon class="material-symbols-outlined">settings</mat-icon>
+        Configurações
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <app-card-mode-actions />
+    <app-card-chat-msgs
+    [msgs]="msgs"
+    />
+  </mat-card-content>
+  <mat-card-footer class="chat-card-actions">
+    <app-card-input-actions
+      (onSendMsg)="sendMsg($event)"
+    />
+  </mat-card-footer>
+</mat-card>

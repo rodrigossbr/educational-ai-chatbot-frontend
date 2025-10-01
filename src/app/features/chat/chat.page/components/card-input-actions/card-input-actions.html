@@ -1,0 +1,14 @@
+<form class="card-input-form">
+  <mat-form-field appearance="outline">
+    <input matInput placeholder="Digite sua mensagem">
+  </mat-form-field>
+
+  <div class="card-input-form-actions">
+    <button matIconButton type="button">
+      <mat-icon class="material-symbols-outlined">mic</mat-icon>
+    </button>
+    <button matIconButton type="button">
+      <mat-icon class="material-symbols-outlined" (click)="sendMsg()">play_arrow</mat-icon>
+    </button>
+  </div>
+</form>

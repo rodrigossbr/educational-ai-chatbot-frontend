@@ -1,0 +1,42 @@
+
+.chat-card {
+  width: 60%;
+  height: 80%;
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+    mat-card-title {
+      padding-top: 8px;
+    }
+
+    .chat-card-header-actions {
+      display: flex;
+      gap: 10px;
+
+      mat-icon {
+        width: 24px;
+        font-size: x-large;
+      }
+
+      .help-button {
+        mat-icon {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  mat-card-content {
+    width: 100%;
+    height: 100%;
+  }
+
+  mat-card-footer {
+    padding: 14px 16px 0 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
