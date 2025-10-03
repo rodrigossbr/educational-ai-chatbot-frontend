@@ -17,7 +17,8 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@core/*": ["./src/app/core/*"],
-      "@feature/*": ["./src/app/features/*"]
+      "@feature/*": ["./src/app/features/*"],
+      "@env/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {

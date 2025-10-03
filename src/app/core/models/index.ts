@@ -1,1 +1,2 @@
-export * from './message.model'
+export * from './ask-text.model'
+export * from './bot-message.model'

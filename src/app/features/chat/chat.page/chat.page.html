@@ -12,9 +12,10 @@
     </div>
   </mat-card-header>
   <mat-card-content>
-    <app-card-mode-actions />
+    <app-card-mode-actions/>
     <app-card-chat-msgs
-    [msgs]="msgs"
+      [loading]="chatLoading"
+      [msgs]="msgs"
     />
   </mat-card-content>
   <mat-card-footer class="chat-card-actions">

@@ -1,4 +1,4 @@
-import {Component, model} from '@angular/core';
+import {Component, EventEmitter, model, Output} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {NgClass} from '@angular/common';
 
@@ -15,11 +15,14 @@ type modeTypes = 'voice' | 'text' | 'libras';
 })
 export class CardModeActions {
 
-  mode: modeTypes = 'voice';
+  @Output() onModeChange: EventEmitter<modeTypes> = new EventEmitter<modeTypes>();
+
+  protected mode: modeTypes = 'text';
 
   protected readonly model = model;
 
   selectMode(mode: modeTypes) {
     this.mode = mode;
+    this.onModeChange.emit(mode);
   }
 }

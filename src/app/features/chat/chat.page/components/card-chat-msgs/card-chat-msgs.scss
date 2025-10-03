@@ -16,9 +16,13 @@
     .msg-text {
       display: flex;
       width: fit-content;
-      padding: 14px 20px;
+      padding: 14px 20px 14px 4px;
       border-radius: 16px;
       max-width: 68%;
+
+      app-chat-loading {
+        margin-left: -16px;
+      }
     }
   }
 
@@ -43,7 +47,7 @@
       &::before {
         content: "";
         position: relative;
-        left: -26px;
+        left: -10px;
         width: 14px;
         height: 12px;
         background: lightgray;
@@ -59,11 +63,12 @@
     .msg-text {
       color: white;
       background-color: #2F6DF6;
+      padding: 14px 8px 14px 14px;
 
       &::after {
         content: "";
         position: relative;
-        right: -25px;
+        right: -14px;
         width: 14px;
         height: 12px;
         background: #2F6DF6;
