@@ -9,5 +9,11 @@
     &.selected {
       background-color: lightblue;
     }
+
+    &.btn-libras {
+      mat-icon {
+        margin-top: 2px;
+      }
+    }
   }
 }

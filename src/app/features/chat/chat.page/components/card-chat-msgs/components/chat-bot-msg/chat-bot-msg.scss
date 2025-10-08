@@ -1,0 +1,44 @@
+:host {
+
+  .bot-msg {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+    max-width: 90%;
+
+    .bot-avatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: lightgray;
+    }
+
+    .msg-text {
+      display: flex;
+      width: fit-content;
+      padding: 14px 20px 14px 4px;
+      border-radius: 16px;
+      max-width: 68%;
+      background-color: lightgray;
+
+      app-chat-loading {
+        margin-left: -16px;
+      }
+
+      &::before {
+        content: "";
+        position: relative;
+        left: -10px;
+        width: 14px;
+        height: 12px;
+        background: lightgray;
+        border-bottom-right-radius: 12px;
+        transform: rotate(410deg);
+      }
+    }
+  }
+}

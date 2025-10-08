@@ -1,14 +1,16 @@
 import {Component, EventEmitter, model, Output} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {NgClass} from '@angular/common';
+import {MatIcon} from '@angular/material/icon';
 
-type modeTypes = 'voice' | 'text' | 'libras';
+export type modeTypes = 'voice' | 'text' | 'libras';
 
 @Component({
   selector: 'app-card-mode-actions',
   imports: [
     MatButton,
-    NgClass
+    NgClass,
+    MatIcon
   ],
   templateUrl: './card-mode-actions.html',
   styleUrl: './card-mode-actions.scss'

@@ -1,0 +1,14 @@
+<div class="bot-msg">
+  <span class="bot-avatar">
+    <mat-icon>person</mat-icon>
+  </span>
+
+  <span #content class="msg-text" [innerHTML]="msg.text"></span>
+  @if (!loading) {
+
+  } @else {
+    <span class="msg-text">
+      <app-chat-loading/>
+    </span>
+  }
+</div>

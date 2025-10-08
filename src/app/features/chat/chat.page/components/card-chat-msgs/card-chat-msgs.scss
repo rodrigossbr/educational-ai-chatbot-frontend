@@ -2,13 +2,12 @@
 .dialog-chat {
   display: flex;
   flex-direction: column;
-  margin: 30px;
+  margin: 6px 20px -4px 0;
   gap: 10px;
   max-height: 50vh;
   overflow-y: auto;
   scroll-behavior: smooth;
 
-  .bot-msg,
   .user-msg {
     display: flex;
     max-width: 90%;
@@ -22,37 +21,6 @@
 
       app-chat-loading {
         margin-left: -16px;
-      }
-    }
-  }
-
-  .bot-msg {
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-
-    .bot-avatar {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: lightgray;
-    }
-
-    .msg-text {
-      background-color: lightgray;
-
-      &::before {
-        content: "";
-        position: relative;
-        left: -10px;
-        width: 14px;
-        height: 12px;
-        background: lightgray;
-        border-bottom-right-radius: 12px;
-        transform: rotate(410deg);
       }
     }
   }

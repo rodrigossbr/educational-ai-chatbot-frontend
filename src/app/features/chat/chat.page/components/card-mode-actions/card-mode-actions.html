@@ -1,6 +1,25 @@
-<button [ngClass]="{ 'selected': mode === 'voice'  }" matButton="outlined" (click)="selectMode('voice')">Voz</button>
-<button [ngClass]="{ 'selected': mode === 'text'  }" matButton="outlined" (click)="selectMode('text')">Texto
-  simplificado
+<button
+  [ngClass]="{ 'selected': mode === 'voice' }"
+  matButton="outlined"
+  (click)="selectMode('voice')"
+>
+  <mat-icon class="material-symbols-outlined">transcribe</mat-icon>
+  Voz
 </button>
-<button [ngClass]="{ 'selected': mode === 'libras'  }" matButton="outlined" (click)="selectMode('libras')">Libras
+<button
+  [ngClass]="{ 'selected': mode === 'text' }"
+  matButton="outlined"
+  (click)="selectMode('text')"
+>
+  <mat-icon class="material-symbols-outlined">textsms</mat-icon>
+  Texto simplificado
+</button>
+<button
+  class="btn-libras"
+  [ngClass]="{ 'selected': mode === 'libras' }"
+  matButton="outlined"
+  (click)="selectMode('libras')"
+>
+  <mat-icon svgIcon="libras"></mat-icon>
+  Libras
 </button>

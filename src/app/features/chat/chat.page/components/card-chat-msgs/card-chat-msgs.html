@@ -6,24 +6,10 @@
 >
   @for (msg of msgs; track msg.id; let i = $index) {
     @if (msg.role == 'bot') {
-
-      <div class="bot-msg">
-        <span class="bot-avatar">
-          <mat-icon>person</mat-icon>
-        </span>
-        <span class="msg-text">
-            @if (!isLastLoading(msg)) {
-              {{ msg.text }}
-            } @else {
-              <app-chat-loading />
-            }
-          </span>
-      </div>
+      <app-chat-bot-msg [mode]="mode" [msg]="msg" [loading]="isLastLoading(msg)" />
     } @else {
       <div class="user-msg">
-        <span class="msg-text">
-          {{ msg.text }}
-        </span>
+        <span class="msg-text" [innerHTML]="msg.text"></span>
       </div>
     }
   } @empty {

@@ -1,12 +1,13 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {CardInputActions} from './components/card-input-actions/card-input-actions';
-import {CardModeActions} from './components/card-mode-actions/card-mode-actions';
+import {CardModeActions, modeTypes} from './components/card-mode-actions/card-mode-actions';
 import {CardChatMsgs} from './components/card-chat-msgs/card-chat-msgs';
-import {AskChatbootService, AskText, BotMessage} from '@app/core';
+import {AskText, BotMessage, ChatbootService} from '@app/core';
 import {finalize, Subscription} from 'rxjs';
+import {HighContrast} from '@app/shared';
 
 @Component({
   selector: 'app-chat.page',
@@ -20,20 +21,20 @@ import {finalize, Subscription} from 'rxjs';
     MatIcon,
     CardInputActions,
     CardModeActions,
-    CardChatMsgs
+    CardChatMsgs,
+    HighContrast
   ],
   templateUrl: './chat.page.html',
   styleUrl: './chat.page.scss'
 })
 export class ChatPage implements OnInit, OnDestroy {
-
-
   protected msgs: BotMessage[] = [];
+  protected mode: modeTypes = 'text';
   protected chatLoading: boolean = false;
 
   private subscription = new Subscription();
 
-  private askChatbootService = inject(AskChatbootService);
+  private chatbootService = inject(ChatbootService);
 
   ngOnInit(): void {
     this.includeFirstMessage();
@@ -43,24 +44,23 @@ export class ChatPage implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  protected onModeChange(mode: modeTypes) {
+    this.mode = mode;
+  }
+
   protected sendMsg(msg: AskText) {
     this.chatLoading = true;
     this.msgs.push({
       id: 1,
       role: 'user',
       text: msg.text
-    })
-    this.subscription.add(
-      this.askChatbootService.chatSendText(msg)
-        .pipe(finalize(() => this.chatLoading = false))
-        .subscribe((result) => {
-          this.msgs.push(result);
-        })
-    );
+    });
+
+    this.askChatboot(msg);
   }
 
   private includeFirstMessage() {
-    this.chatLoading= true;
+    this.chatLoading = true;
     const msg: BotMessage = {
       id: 0,
       role: "bot",
@@ -70,5 +70,21 @@ export class ChatPage implements OnInit, OnDestroy {
     setTimeout(() => {
       this.chatLoading = false;
     }, 1000);
+  }
+
+  private askChatboot(msg: AskText) {
+    const botMsg: BotMessage = {
+      id: 1,
+      role: 'bot',
+      text: ''
+    };
+    this.msgs.push(botMsg);
+    this.subscription.add(
+      this.chatbootService.chatSendText(msg)
+        .pipe(finalize(() => this.chatLoading = false))
+        .subscribe((result) => {
+          botMsg.text = result.text;
+        })
+    );
   }
 }

@@ -1,15 +1,14 @@
 import {Component, Input} from '@angular/core';
 import {BotMessage} from '@app/core';
-import {MatIcon} from '@angular/material/icon';
 import {AutoScrollDirective} from '@app/shared';
-import {ChatLoading} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-loading/chat-loading';
+import {ChatBotMsg} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-bot-msg/chat-bot-msg';
+import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
 
 @Component({
   selector: 'app-card-chat-msgs',
   imports: [
-    MatIcon,
     AutoScrollDirective,
-    ChatLoading
+    ChatBotMsg
   ],
   templateUrl: './card-chat-msgs.html',
   styleUrl: './card-chat-msgs.scss'
@@ -17,6 +16,7 @@ import {ChatLoading} from '@feature/chat/chat.page/components/card-chat-msgs/com
 export class CardChatMsgs {
 
   @Input() msgs: BotMessage[] = [];
+  @Input() mode: modeTypes = 'text';
   @Input() loading: boolean = false;
 
   protected isLastLoading(msg: BotMessage) {

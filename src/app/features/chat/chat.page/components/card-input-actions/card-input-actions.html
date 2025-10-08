@@ -3,12 +3,17 @@
     <input
       formControlName="msg"
       matInput
-      placeholder="Digite sua mensagem"
+      [placeholder]="activatedMic ? 'Aguardando áudio...' : 'Digite sua mensagem...'"
+      (keyup.enter)="sendTextMsg()"
     >
   </mat-form-field>
 
   <div class="card-input-form-actions">
-    <button matIconButton type="button" (click)="sendAudioMsg()">
+    <button
+      matIconButton type="button"
+      (mousedown)="startRecord()"
+      (mouseup)="stopRecord()"
+    >
       <mat-icon class="material-symbols-outlined">mic</mat-icon>
     </button>
     <button matIconButton type="button">

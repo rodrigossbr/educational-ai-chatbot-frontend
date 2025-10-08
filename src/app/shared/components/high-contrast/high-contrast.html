@@ -1,0 +1,15 @@
+<div [attr.aria-labelledby]="contrastButtonId" class="high-contrast-button">
+  <button
+    [id]="contrastButtonId"
+    mat-icon-button
+    color="primary"
+    aria-label="Habilitar alto contraste"
+    data-test="botao-contraste"
+    (click)="contrastChange()"
+  >
+    <mat-icon>contrast</mat-icon>
+  </button>
+  <label [for]="contrastButtonId">
+    {{ contrastLabel }}
+  </label>
+</div>

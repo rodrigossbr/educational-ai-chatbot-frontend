@@ -1,0 +1,12 @@
+:host {
+
+  .high-contrast-button {
+    display: flex;
+    align-items: center;
+    width: 140px;
+
+    button {
+      margin-right: 4px;
+    }
+  }
+}
