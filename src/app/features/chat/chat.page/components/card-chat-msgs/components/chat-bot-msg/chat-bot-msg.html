@@ -3,9 +3,10 @@
     <mat-icon>person</mat-icon>
   </span>
 
-  <span #content class="msg-text" [innerHTML]="msg.text"></span>
   @if (!loading) {
-
+    <div #content class="msg-text">
+      <span [innerHTML]="msg.text | markdown"></span>
+    </div>
   } @else {
     <span class="msg-text">
       <app-chat-loading/>

@@ -49,7 +49,6 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   protected sendMsg(msg: AskText) {
-    this.chatLoading = true;
     this.msgs.push({
       id: 1,
       role: 'user',
@@ -60,16 +59,9 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   private includeFirstMessage() {
-    this.chatLoading = true;
-    const msg: BotMessage = {
-      id: 0,
-      role: "bot",
-      text: "Olá, como posso lhe ajudar?"
-    }
-    this.msgs.push(msg);
-    setTimeout(() => {
-      this.chatLoading = false;
-    }, 1000);
+    this.askChatboot({
+      text: 'Olá'
+    });
   }
 
   private askChatboot(msg: AskText) {
@@ -78,6 +70,7 @@ export class ChatPage implements OnInit, OnDestroy {
       role: 'bot',
       text: ''
     };
+    this.chatLoading = true;
     this.msgs.push(botMsg);
     this.subscription.add(
       this.chatbootService.chatSendText(msg)

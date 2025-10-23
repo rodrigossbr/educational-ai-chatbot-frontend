@@ -4,12 +4,14 @@ import {MatIcon} from '@angular/material/icon';
 import {BotMessage, VlibrasService} from '@app/core';
 import {TtsService} from '@core/services/tts/tts.service';
 import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
+import {MarkdownPipe} from '@app/shared/pipes/markdown/markdown-pipe';
 
 @Component({
   selector: 'app-chat-bot-msg',
   imports: [
     ChatLoading,
-    MatIcon
+    MatIcon,
+    MarkdownPipe
   ],
   templateUrl: './chat-bot-msg.html',
   styleUrl: './chat-bot-msg.scss'
@@ -40,12 +42,12 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
       return;
     }
 
-    const el = this.content.nativeElement;
-    const sel = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(el);
-    sel?.removeAllRanges();
-    sel?.addRange(range);
+    // const el = this.content.nativeElement;
+    // const sel = window.getSelection();
+    // const range = document.createRange();
+    // range.selectNodeContents(el);
+    // sel?.removeAllRanges();
+    // sel?.addRange(range);
 
     this.vlibrasService.openWidget();
   }
