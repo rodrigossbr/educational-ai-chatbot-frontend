@@ -1,9 +1,15 @@
-<form [formGroup]="form" class="card-input-form">
-  <mat-form-field appearance="outline">
+<form
+  [formGroup]="form"
+  class="card-input-form"
+  [class.is-recording]="activatedMic"
+>
+  <mat-form-field
+    appearance="outline"
+  >
     <input
       formControlName="msg"
       matInput
-      [placeholder]="activatedMic ? 'Aguardando áudio...' : 'Digite sua mensagem...'"
+      [placeholder]="activatedMic ? '🎙️ Gravando… fale que eu digito' : 'Digite sua mensagem...'"
       (keyup.enter)="sendTextMsg()"
     >
   </mat-form-field>
@@ -11,13 +17,47 @@
   <div class="card-input-form-actions">
     <button
       matIconButton type="button"
-      (mousedown)="startRecord()"
-      (mouseup)="stopRecord()"
+      (mousedown)="startRecord($event)"
+      (mouseup)="stopRecord($event)"
+      (touchstart)="startRecord($event)"
+      (touchend)="stopRecord($event)"
+      (touchcancel)="stopRecord($event)"
+      (keydown.enter)="startRecord($event)"
+      (keyup.enter)="stopRecord($event)"
+      [class.recording]="activatedMic"
+      [attr.aria-pressed]="activatedMic"
+      [attr.aria-label]="activatedMic ? 'Gravando, solte para parar' : 'Segure para falar'"
+      [disabled]="loading"
     >
       <mat-icon class="material-symbols-outlined">mic</mat-icon>
+      @if (activatedMic) {
+        <span class="rec-dot" aria-hidden="true"></span>
+      }
     </button>
-    <button matIconButton type="button">
+    <button
+      matIconButton
+      type="button"
+      [disabled]="activatedMic || loading"
+    >
       <mat-icon class="material-symbols-outlined" (click)="sendTextMsg()">play_arrow</mat-icon>
     </button>
   </div>
 </form>
+
+@if (activatedMic) {
+  <div class="rec-visual" aria-live="polite">
+    <div class="bars" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <span class="rec-text">Gravando…</span>
+  </div>
+}

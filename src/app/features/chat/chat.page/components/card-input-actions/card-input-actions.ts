@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatIconButton} from '@angular/material/button';
@@ -20,7 +20,9 @@ import {SpeechService} from '@core/services/speech/speech.service';
   templateUrl: './card-input-actions.html',
   styleUrl: './card-input-actions.scss'
 })
-export class CardInputActions implements OnInit {
+export class CardInputActions implements OnInit, OnChanges {
+
+  @Input() loading: boolean = false;
   @Output() onSendMsg: EventEmitter<BotMessage> = new EventEmitter<BotMessage>();
 
   protected activatedMic: boolean = false;
@@ -29,24 +31,35 @@ export class CardInputActions implements OnInit {
   private fb: FormBuilder = inject(FormBuilder);
   public stt: SpeechService = inject(SpeechService);
 
-  private text = '';
   protected hint = '';
   private sub = new Subscription();
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.buildForm();
     this.configStt();
   }
 
-  protected sendAudioMsg() {
-    if (this.form.valid) {
-      this.onSendMsg.emit({
-        id: 0,
-        role: 'user',
-        text: this.form.get('msg')?.value
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['loading'] && this.form) {
+      if (this.loading) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
     }
-    this.form.reset();
+  }
+
+  protected sendAudioMsg() {
+    setTimeout(() => {
+      if (this.form.valid) {
+        this.onSendMsg.emit({
+          id: 0,
+          role: 'user',
+          text: this.form.get('msg')?.value
+        });
+      }
+      this.form.reset();
+    }, 400);
   }
 
   protected sendTextMsg() {
@@ -60,35 +73,45 @@ export class CardInputActions implements OnInit {
     this.form.reset();
   }
 
-  protected startRecord() {
+  protected startRecord(event?: Event) {
+    event?.preventDefault();
+    if (this.activatedMic) {
+      return;
+    }
+
+    this.form.reset();
     if (!this.stt.supported.value) {
       alert('Reconhecimento de fala não suportado neste navegador.');
-    } else if (this.stt.listening.value) {
-      this.stt.stop();
     } else {
-      this.stt.start();
+      this.activatedMic = true;
+      this.stt.start('pt-BR');
     }
   }
 
-  protected stopRecord() {
+  protected stopRecord(event?: Event) {
+    event?.preventDefault();
+    if (!this.activatedMic) {
+      return;
+    }
+
+    this.activatedMic = false;
     this.stt.stop();
-    this.sendAudioMsg()
+    this.stt.clear();
   }
 
   private buildForm(): void {
     this.form = this.fb.group({
       msg: [null, [Validators.required]]
     });
+    this.form.disable();
   }
 
   private configStt() {
-    // quando sair o final, coloca no input (anexa com espaço se já tiver texto)
     this.sub.add(this.stt.final.subscribe(finalText => {
-      this.text = this.text ? (this.text.trim() + ' ' + finalText) : finalText;
       this.hint = '';
-      this.form.get('msg')?.patchValue(this.text);
+      this.form.get('msg')?.patchValue(finalText.trim());
+      this.sendAudioMsg()
     }));
-    // interim (rascunho) aparece como dica
     this.sub.add(this.stt.interim.subscribe(v => this.hint = v));
 
     this.sub.add(this.stt.listening

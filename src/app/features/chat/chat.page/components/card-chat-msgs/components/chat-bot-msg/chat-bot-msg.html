@@ -4,8 +4,32 @@
   </span>
 
   @if (!loading) {
-    <div #content class="msg-text">
-      <span [innerHTML]="msg.text | markdown"></span>
+    <div>
+      <div #content class="msg-text">
+        <span [innerHTML]="msg.text | markdown"></span>
+      </div>
+      @if (msg.feedbackEnabled) {
+        <div class="msg-actions">
+          <button
+            matIconButton
+            type="button"
+            aria-label="Menssagem útil"
+            [attr.selected]="likedMode == 'liked'"
+            (click)="likeButtonSelect('liked')"
+          >
+            <mat-icon class="material-symbols-outlined">thumb_up</mat-icon>
+          </button>
+          <button
+            matIconButton
+            type="button"
+            aria-label="Menssagem inútil"
+            [attr.selected]="likedMode == 'unliked'"
+            (click)="likeButtonSelect('unliked')"
+          >
+            <mat-icon class="material-symbols-outlined">thumb_down</mat-icon>
+          </button>
+        </div>
+      }
     </div>
   } @else {
     <span class="msg-text">

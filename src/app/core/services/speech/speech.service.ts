@@ -1,10 +1,10 @@
-import { Injectable, Inject, PLATFORM_ID, NgZone } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Subject } from 'rxjs';
+import {Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {BehaviorSubject, Subject} from 'rxjs';
 
 type SR = typeof window extends any ? any : never;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class SpeechService {
   private rec: SR | null = null;
   readonly supported = new BehaviorSubject<boolean>(false);
@@ -15,7 +15,10 @@ export class SpeechService {
   constructor(@Inject(PLATFORM_ID) pid: object, private zone: NgZone) {
     if (!isPlatformBrowser(pid)) return;
     const SRClass: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SRClass) { this.supported.next(false); return; }
+    if (!SRClass) {
+      this.supported.next(false);
+      return;
+    }
 
     this.rec = new SRClass();
     this.rec.continuous = false;          // uma frase por vez (ajuste p/ true se quiser)
@@ -24,7 +27,7 @@ export class SpeechService {
     this.rec.maxAlternatives = 1;
 
     this.rec.onstart = () => this.zone.run(() => this.listening.next(true));
-    this.rec.onend   = () => this.zone.run(() => {
+    this.rec.onend = () => this.zone.run(() => {
       this.listening.next(false);
       this.interim.next('');
     });
@@ -40,7 +43,10 @@ export class SpeechService {
       }
       this.zone.run(() => {
         if (interim) this.interim.next(interim);
-        if (final) { this.final.next(final.trim()); this.interim.next(''); }
+        if (final) {
+          this.final.next(final.trim());
+          this.interim.next('');
+        }
       });
     };
 
@@ -51,9 +57,39 @@ export class SpeechService {
     if (!this.rec) return;
     if (this.listening.value) return;
     this.rec.lang = lang || 'pt-BR';
-    try { this.rec.start(); } catch { /* já estava rodando */ }
+    try {
+      this.rec.start();
+    } catch { /* já estava rodando */
+    }
   }
 
-  stop()  { try { this.rec?.stop(); } catch {} }
-  abort() { try { this.rec?.abort(); } catch {} }
+  stop() {
+    try {
+      this.rec?.stop();
+    } catch {
+    }
+  }
+
+  abort() {
+    try {
+      this.rec?.abort();
+    } catch {
+    }
+  }
+
+  clear() {
+    this.interim.next('');
+  }
+
+  async restart(lang = 'pt-BR') {
+    if (!this.rec) {
+      return;
+    }
+    if (this.listening.value) {
+      this.stop();
+    }
+
+    await new Promise(r => setTimeout(r, 120)); // dá tempo do onend drenar
+    this.start(lang);
+  }
 }

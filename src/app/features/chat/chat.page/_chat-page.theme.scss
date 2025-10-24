@@ -1,0 +1,27 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  .chat-card {
+    mat-card-header {
+      border-bottom: 1px solid mat.get-theme-color($theme, neutral, 80);
+    }
+
+    mat-card-footer {
+      border-top: 1px solid mat.get-theme-color($theme, neutral, 80);
+    }
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+
+  .chat-card {
+    mat-card-header {
+      border-bottom: 1px solid mat.get-theme-color($theme, neutral, 100);
+    }
+
+    mat-card-footer {
+      border-top: 1px solid mat.get-theme-color($theme, neutral, 100);
+    }
+  }
+}

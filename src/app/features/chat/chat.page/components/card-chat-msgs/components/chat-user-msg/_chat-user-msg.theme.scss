@@ -1,0 +1,28 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  .user-msg {
+    .msg-text {
+      color: mat.get-theme-color($theme, primary, 100);;
+      background-color: mat.get-theme-color($theme, primary, 50);
+
+      &::after {
+        background: mat.get-theme-color($theme, primary, 50);
+      }
+    }
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+  .user-msg {
+    .msg-text {
+      color: mat.get-theme-color($theme, neutral, 100);;
+      background-color: mat.get-theme-color($theme, neutral, 40);
+
+      &::after {
+        background: mat.get-theme-color($theme, neutral, 40);
+      }
+    }
+  }
+}

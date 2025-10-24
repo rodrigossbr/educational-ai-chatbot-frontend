@@ -7,7 +7,6 @@
     display: flex;
     justify-content: space-between;
     padding: 16px 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
     mat-card-title {
       padding-top: 8px;
@@ -38,6 +37,5 @@
 
   mat-card-footer {
     padding: 14px 16px 0 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
   }
 }

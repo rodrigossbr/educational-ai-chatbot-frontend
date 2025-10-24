@@ -1,8 +1,8 @@
-import { Injectable, Inject, PLATFORM_ID, NgZone } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Subject } from 'rxjs';
+import {Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {BehaviorSubject, Subject} from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TtsService {
   private synth: SpeechSynthesis | null;
   voices$ = new BehaviorSubject<SpeechSynthesisVoice[]>([]);
@@ -25,29 +25,47 @@ export class TtsService {
 
   read(text: string) {
     const voice = this.defaultPtBrVoice();
-    this.speak(text, { voice, rate: this.rate, lang: voice?.lang || 'pt-BR' });
+    this.speak(text, {voice, rate: this.rate, lang: voice?.lang || 'pt-BR'});
   }
 
-  pause()  { this.synth?.pause(); }
-  resume() { this.synth?.resume(); }
-  cancel() { this.synth?.cancel(); this.speaking$.next(false); }
+  pause() {
+    this.synth?.pause();
+  }
+
+  resume() {
+    this.synth?.resume();
+  }
+
+  cancel() {
+    this.synth?.cancel();
+    this.speaking$.next(false);
+  }
 
   /** Lê o texto (divide em partes p/ evitar travar com textos longos) */
-  private speak(text: string, opts?: { voice?: SpeechSynthesisVoice; rate?: number; pitch?: number; volume?: number; lang?: string }) {
+  private speak(text: string, opts?: {
+    voice?: SpeechSynthesisVoice;
+    rate?: number;
+    pitch?: number;
+    volume?: number;
+    lang?: string
+  }) {
     this.cancel();
     if (!this.synth) return;
     const chunks = this.chunk(text);
     const speakOne = (i: number) => {
-      if (i >= chunks.length) { this.zone.run(() => this.speaking$.next(false)); return; }
+      if (i >= chunks.length) {
+        this.zone.run(() => this.speaking$.next(false));
+        return;
+      }
       const u = new SpeechSynthesisUtterance(chunks[i]);
       if (opts?.voice) u.voice = opts.voice;
-      u.lang   = opts?.lang ?? opts?.voice?.lang ?? 'pt-BR';
-      u.rate   = opts?.rate ?? 1;
-      u.pitch  = opts?.pitch ?? 1;
+      u.lang = opts?.lang ?? opts?.voice?.lang ?? 'pt-BR';
+      u.rate = opts?.rate ?? 1;
+      u.pitch = opts?.pitch ?? 1;
       u.volume = opts?.volume ?? 1;
 
       u.onstart = () => this.zone.run(() => this.speaking$.next(true));
-      u.onend   = () => this.zone.run(() => speakOne(i + 1));
+      u.onend = () => this.zone.run(() => speakOne(i + 1));
       u.onboundary = (e: any) => this.zone.run(() => this.boundary$.next(e.charIndex ?? 0));
 
       this.synth!.speak(u);
@@ -67,7 +85,8 @@ export class TtsService {
   unlockIOS() {
     if (!this.synth) return;
     const u = new SpeechSynthesisUtterance(' ');
-    this.synth.speak(u); this.synth.cancel();
+    this.synth.speak(u);
+    this.synth.cancel();
   }
 
   private chunk(t: string): string[] {
@@ -76,8 +95,10 @@ export class TtsService {
     const parts: string[] = [];
     let buf = '';
     for (const piece of s.split(/(?<=[\.\!\?])\s+/g)) {
-      if ((buf + ' ' + piece).length > 220) { parts.push(buf); buf = piece; }
-      else buf = buf ? buf + ' ' + piece : piece;
+      if ((buf + ' ' + piece).length > 220) {
+        parts.push(buf);
+        buf = piece;
+      } else buf = buf ? buf + ' ' + piece : piece;
     }
     if (buf) parts.push(buf);
     return parts;

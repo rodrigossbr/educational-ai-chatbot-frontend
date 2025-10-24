@@ -77,6 +77,7 @@ export class ChatPage implements OnInit, OnDestroy {
         .pipe(finalize(() => this.chatLoading = false))
         .subscribe((result) => {
           botMsg.text = result.text;
+          botMsg.feedbackEnabled = result.feedbackEnabled;
         })
     );
   }

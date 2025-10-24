@@ -27,10 +27,10 @@ export class HighContrast {
   protected contrastChange(): void {
     if (this.selectedTheme == ThemeEnum.defaultTheme) {
       this.selectedTheme = ThemeEnum.highContrast;
-      this.contrastLabel = 'Alto contraste';
+      this.contrastLabel = 'Tema padrão';
     } else {
       this.selectedTheme = ThemeEnum.defaultTheme;
-      this.contrastLabel = 'Tema padrão';
+      this.contrastLabel = 'Alto contraste';
     }
 
     this.themeService.setTheme(this.selectedTheme);

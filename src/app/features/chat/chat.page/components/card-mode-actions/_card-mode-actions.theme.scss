@@ -1,0 +1,26 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  app-card-mode-actions {
+    button {
+      &.selected {
+        color: mat.get-theme-color($theme, primary, 50);
+        background-color: mat.get-theme-color($theme, primary, 80);
+      }
+    }
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+
+  app-card-mode-actions {
+    button {
+      &.selected {
+        color: mat.get-theme-color($theme, neutral, 0);
+        background-color: mat.get-theme-color($theme, neutral, 100);
+      }
+    }
+  }
+
+}

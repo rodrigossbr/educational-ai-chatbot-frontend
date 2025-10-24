@@ -1,0 +1,45 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  .bot-msg {
+    .bot-avatar {
+      color: mat.get-theme-color($theme, neutral, 60);
+      background-color: mat.get-theme-color($theme, neutral, 80);
+    }
+
+    .msg-text {
+      color: mat.get-theme-color($theme, neutral, 30);
+      background-color: mat.get-theme-color($theme, neutral, 80);
+
+      &::before {
+        background: mat.get-theme-color($theme, neutral, 80);
+      }
+    }
+
+    .msg-actions {
+
+      button[selected=true] {
+        color: mat.get-theme-color($theme, primary, 50);
+      }
+    }
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+  .bot-msg {
+    .bot-avatar {
+      color: mat.get-theme-color($theme, neutral, 0);
+      background-color: mat.get-theme-color($theme, neutral, 100);
+    }
+
+    .msg-text {
+      color: mat.get-theme-color($theme, neutral, 0);
+      background-color: mat.get-theme-color($theme, neutral, 100);
+
+      &::before {
+        background: mat.get-theme-color($theme, neutral, 100);
+      }
+    }
+  }
+}

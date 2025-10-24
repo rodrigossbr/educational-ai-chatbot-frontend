@@ -6,11 +6,9 @@
 >
   @for (msg of msgs; track msg.id; let i = $index) {
     @if (msg.role == 'bot') {
-      <app-chat-bot-msg [mode]="mode" [msg]="msg" [loading]="isLastLoading(msg)" />
+      <app-chat-bot-msg [mode]="mode" [msg]="msg" [loading]="isLastLoading(msg)"/>
     } @else {
-      <div class="user-msg">
-        <span class="msg-text" [innerHTML]="msg.text"></span>
-      </div>
+      <app-chat-user-msg [msg]="msg"/>
     }
   } @empty {
     <span>Nenhum registro</span>

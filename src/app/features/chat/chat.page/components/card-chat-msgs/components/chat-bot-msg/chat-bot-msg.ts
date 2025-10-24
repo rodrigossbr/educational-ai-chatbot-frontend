@@ -5,11 +5,13 @@ import {BotMessage, VlibrasService} from '@app/core';
 import {TtsService} from '@core/services/tts/tts.service';
 import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
 import {MarkdownPipe} from '@app/shared/pipes/markdown/markdown-pipe';
+import {MatIconButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-chat-bot-msg',
   imports: [
     ChatLoading,
+    MatIconButton,
     MatIcon,
     MarkdownPipe
   ],
@@ -20,6 +22,7 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
   @Input() loading: boolean = false;
   @Input() msg!: BotMessage;
   @Input() mode: modeTypes = 'text';
+  @Input() likedMode: 'liked' | 'unliked' | 'unselected' = 'unselected';
 
   @ViewChild('content', { static: true }) private content!: ElementRef<HTMLElement>;
 
@@ -35,6 +38,10 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
       this.traduzir();
       this.read();
     }
+  }
+
+  protected likeButtonSelect(likedMode: 'liked' | 'unliked' | 'unselected') {
+      this.likedMode = likedMode;
   }
 
   private traduzir() {
@@ -55,6 +62,8 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
   private read() {
     if (this.mode === 'voice' && this.msg.text) {
       this.tts.read(this.msg.text);
+    } else {
+      this.tts.cancel();
     }
   }
 }

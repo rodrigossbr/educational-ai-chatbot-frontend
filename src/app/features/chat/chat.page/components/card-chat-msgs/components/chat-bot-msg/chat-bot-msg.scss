@@ -2,7 +2,6 @@
 
   .bot-msg {
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     gap: 16px;
     max-width: 90%;
@@ -11,10 +10,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-top: 20px;
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: lightgray;
     }
 
     .msg-text {
@@ -23,7 +22,6 @@
       padding: 4px 18px 4px 4px;
       border-radius: 16px;
       max-width: 68%;
-      background-color: lightgray;
 
       app-chat-loading {
         margin: 18px 6px;
@@ -36,9 +34,25 @@
         left: -10px;
         width: 14px;
         height: 12px;
-        background: lightgray;
         border-bottom-right-radius: 12px;
         transform: rotate(410deg);
+      }
+    }
+
+    .msg-actions {
+      display: flex;
+      justify-content: end;
+      max-width: 68%;
+
+      button {
+        display: flex;
+        width: 30px;
+        height: 30px;
+        justify-content: center;
+
+        mat-icon {
+          font-size: large;
+        }
       }
     }
   }

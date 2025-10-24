@@ -1,12 +1,4 @@
-
-.dialog-chat {
-  display: flex;
-  flex-direction: column;
-  margin: 6px 20px -4px 0;
-  gap: 10px;
-  max-height: 54vh;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+:host {
 
   .user-msg {
     display: flex;
@@ -16,7 +8,6 @@
     .msg-text {
       display: flex;
       width: fit-content;
-      padding: 14px 20px 14px 4px;
       border-radius: 16px;
       max-width: 68%;
       //color: white;
