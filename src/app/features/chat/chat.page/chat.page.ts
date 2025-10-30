@@ -5,9 +5,11 @@ import {MatIcon} from '@angular/material/icon';
 import {CardInputActions} from './components/card-input-actions/card-input-actions';
 import {CardModeActions, modeTypes} from './components/card-mode-actions/card-mode-actions';
 import {CardChatMsgs} from './components/card-chat-msgs/card-chat-msgs';
-import {AskText, BotMessage, ChatbootService} from '@app/core';
+import {AskText, BotMessage, ChatbootService, SessionService} from '@app/core';
 import {finalize, Subscription} from 'rxjs';
 import {HighContrast} from '@app/shared';
+import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
+import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/chat-storage.model';
 
 @Component({
   selector: 'app-chat.page',
@@ -30,14 +32,18 @@ import {HighContrast} from '@app/shared';
 export class ChatPage implements OnInit, OnDestroy {
   protected msgs: BotMessage[] = [];
   protected mode: modeTypes = 'text';
+  protected state?: ChatStorage;
   protected chatLoading: boolean = false;
 
   private subscription = new Subscription();
 
   private chatbootService = inject(ChatbootService);
+  private sessionService = inject(SessionService);
+  private chatStorageService = inject(ChatStorageService);
 
   ngOnInit(): void {
-    this.includeFirstMessage();
+    this.configuresStateStore();
+    this.loadSession();
   }
 
   ngOnDestroy(): void {
@@ -50,7 +56,7 @@ export class ChatPage implements OnInit, OnDestroy {
 
   protected sendMsg(msg: AskText) {
     this.msgs.push({
-      id: 1,
+      id: this.msgs.length,
       role: 'user',
       text: msg.text
     });
@@ -59,26 +65,50 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   private includeFirstMessage() {
-    this.askChatboot({
-      text: 'Olá'
-    });
+    if (this.state?.sessionId) {
+      this.askChatboot({
+        text: 'Olá'
+      });
+    }
   }
 
   private askChatboot(msg: AskText) {
     const botMsg: BotMessage = {
-      id: 1,
+      id: this.msgs.length,
       role: 'bot',
       text: ''
     };
     this.chatLoading = true;
     this.msgs.push(botMsg);
     this.subscription.add(
-      this.chatbootService.chatSendText(msg)
+      this.chatbootService.chatSendText({
+        ...msg,
+        sessionId: this.state?.sessionId,
+      })
         .pipe(finalize(() => this.chatLoading = false))
         .subscribe((result) => {
           botMsg.text = result.text;
           botMsg.feedbackEnabled = result.feedbackEnabled;
         })
+    );
+  }
+
+  private configuresStateStore() {
+    this.subscription.add(
+      this.chatStorageService.state$.subscribe((state) => {
+        this.state = state;
+        this.includeFirstMessage();
+      })
+    );
+  }
+
+  private loadSession() {
+    this.subscription.add(
+      this.sessionService.getSession().subscribe((session) => {
+        this.chatStorageService.updatePartialState({
+          sessionId: session.sessionId
+        });
+      })
     );
   }
 }

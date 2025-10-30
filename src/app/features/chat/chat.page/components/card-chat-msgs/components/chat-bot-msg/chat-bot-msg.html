@@ -14,8 +14,8 @@
             matIconButton
             type="button"
             aria-label="Menssagem útil"
-            [attr.selected]="likedMode == 'liked'"
-            (click)="likeButtonSelect('liked')"
+            [attr.selected]="msg.helpful"
+            (click)="likeButtonSelect(msg)"
           >
             <mat-icon class="material-symbols-outlined">thumb_up</mat-icon>
           </button>
@@ -23,8 +23,8 @@
             matIconButton
             type="button"
             aria-label="Menssagem inútil"
-            [attr.selected]="likedMode == 'unliked'"
-            (click)="likeButtonSelect('unliked')"
+            [attr.selected]="msg.helpful == false"
+            (click)="unlikeButtonSelect(msg)"
           >
             <mat-icon class="material-symbols-outlined">thumb_down</mat-icon>
           </button>

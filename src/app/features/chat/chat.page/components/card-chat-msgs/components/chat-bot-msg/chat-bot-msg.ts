@@ -1,4 +1,15 @@
-import {AfterViewInit, Component, ElementRef, inject, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {ChatLoading} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-loading/chat-loading';
 import {MatIcon} from '@angular/material/icon';
 import {BotMessage, VlibrasService} from '@app/core';
@@ -22,9 +33,10 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
   @Input() loading: boolean = false;
   @Input() msg!: BotMessage;
   @Input() mode: modeTypes = 'text';
-  @Input() likedMode: 'liked' | 'unliked' | 'unselected' = 'unselected';
 
-  @ViewChild('content', { static: true }) private content!: ElementRef<HTMLElement>;
+  @Output() likedModeChange: EventEmitter<BotMessage> = new EventEmitter();
+
+  @ViewChild('content', {static: true}) private content!: ElementRef<HTMLElement>;
 
   private vlibrasService: VlibrasService = inject(VlibrasService);
   private tts = inject(TtsService);
@@ -40,8 +52,14 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
     }
   }
 
-  protected likeButtonSelect(likedMode: 'liked' | 'unliked' | 'unselected') {
-      this.likedMode = likedMode;
+  protected likeButtonSelect(msg: BotMessage) {
+    this.msg.helpful = this.msg.helpful == true ? undefined : true;
+    this.likedModeChange.emit(msg);
+  }
+
+  protected unlikeButtonSelect(msg: BotMessage) {
+    this.msg.helpful = this.msg.helpful == false ? undefined : false;
+    this.likedModeChange.emit(msg);
   }
 
   private traduzir() {

@@ -6,7 +6,12 @@
 >
   @for (msg of msgs; track msg.id; let i = $index) {
     @if (msg.role == 'bot') {
-      <app-chat-bot-msg [mode]="mode" [msg]="msg" [loading]="isLastLoading(msg)"/>
+      <app-chat-bot-msg
+        [mode]="mode"
+        [msg]="msg"
+        [loading]="isLastLoading(msg)"
+        (likedModeChange)="likedMode($event)"
+      />
     } @else {
       <app-chat-user-msg [msg]="msg"/>
     }

@@ -1,6 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {AskChatbootService, AskText, BotMessage, VlibrasService} from '@app/core';
-import {Observable, tap} from 'rxjs';
+import {AskChatbootService} from "@app/core/api";
+import {AskText, BotMessage} from "@app/core/models";
+
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

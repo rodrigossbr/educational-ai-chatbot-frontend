@@ -16,6 +16,7 @@
     <app-card-mode-actions (onModeChange)="onModeChange($event)" />
     <app-card-chat-msgs
       [mode]="mode"
+      [state]="state"
       [msgs]="msgs"
       [loading]="chatLoading"
     />
