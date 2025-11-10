@@ -1,4 +1,14 @@
-import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatIconButton} from '@angular/material/button';
@@ -20,19 +30,19 @@ import {SpeechService} from '@core/services/speech/speech.service';
   templateUrl: './card-input-actions.html',
   styleUrl: './card-input-actions.scss'
 })
-export class CardInputActions implements OnInit, OnChanges {
-
+export class CardInputActions implements OnInit, OnChanges, OnDestroy {
   @Input() loading: boolean = false;
+
   @Output() onSendMsg: EventEmitter<BotMessage> = new EventEmitter<BotMessage>();
-
   protected activatedMic: boolean = false;
+
   protected form!: FormGroup;
-
   private fb: FormBuilder = inject(FormBuilder);
-  public stt: SpeechService = inject(SpeechService);
 
+  public stt: SpeechService = inject(SpeechService);
   protected hint = '';
-  private sub = new Subscription();
+
+  private subscription = new Subscription();
 
   ngOnInit(): void {
     this.buildForm();
@@ -47,6 +57,10 @@ export class CardInputActions implements OnInit, OnChanges {
         this.form.enable();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   protected sendAudioMsg() {
@@ -107,16 +121,22 @@ export class CardInputActions implements OnInit, OnChanges {
   }
 
   private configStt() {
-    this.sub.add(this.stt.final.subscribe(finalText => {
-      this.hint = '';
-      this.form.get('msg')?.patchValue(finalText.trim());
-      this.sendAudioMsg()
-    }));
-    this.sub.add(this.stt.interim.subscribe(v => this.hint = v));
+    this.subscription.add(
+      this.stt.final.subscribe(finalText => {
+        this.hint = '';
+        this.form.get('msg')?.patchValue(finalText.trim());
+        this.sendAudioMsg()
+      })
+    );
+    this.subscription.add(
+      this.stt.interim.subscribe(v => this.hint = v)
+    );
 
-    this.sub.add(this.stt.listening
-      .subscribe(listening => {
-        this.activatedMic = listening;
-      }));
+    this.subscription.add(
+      this.stt.listening
+        .subscribe(listening => {
+          this.activatedMic = listening;
+        })
+    );
   }
 }

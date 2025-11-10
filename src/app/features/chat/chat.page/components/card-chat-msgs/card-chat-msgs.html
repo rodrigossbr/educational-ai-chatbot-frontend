@@ -1,8 +1,6 @@
-<div class="dialog-chat"
-     [appAutoScroll]="msgs.length"
-     [autoScrollBehavior]="'smooth'"
-     [autoScrollThreshold]="80"
-     [autoScrollAnchor]="end"
+<div
+    class="dialog-chat"
+    appAutoScroll
 >
   @for (msg of msgs; track msg.id; let i = $index) {
     @if (msg.role == 'bot') {
@@ -18,5 +16,4 @@
   } @empty {
     <span>Nenhum registro</span>
   }
-  <div #end></div>
 </div>

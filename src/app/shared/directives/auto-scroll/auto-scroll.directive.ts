@@ -1,69 +1,72 @@
-import {DestroyRef, Directive, effect, ElementRef, EventEmitter, input, NgZone, Output} from '@angular/core';
+import {Directive, ElementRef, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {auditTime, fromEvent, Subject, takeUntil} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Directive({
   selector: '[appAutoScroll]',
   standalone: true,
   exportAs: 'autoScroll',
 })
-export class AutoScrollDirective {
-  trigger = input<any>(null, { alias: 'appAutoScroll' });
-  lock = input<boolean>(false, { alias: 'autoScrollLock' });
-  threshold = input<number>(80, { alias: 'autoScrollThreshold' });
-  behavior = input<'smooth' | 'auto'>('smooth', { alias: 'autoScrollBehavior' });
-  anchor = input<HTMLElement | null>(null, { alias: 'autoScrollAnchor' });
+export class AutoScrollDirective implements OnInit, OnDestroy {
+  @Input() bottomThreshold = 32;
+  @Input() scrollBehavior: ScrollBehavior = 'smooth';
+  @Input() stickOnInit = true;
 
-  @Output() autoScrollStuckChange = new EventEmitter<boolean>();
+  private destroy$ = new Subject<void>();
+  private mutationObs?: MutationObserver;
+  private resizeObs?: ResizeObserver;
+  private shouldStick = true; // se o usuário está “colado” no fundo
 
-  private stuck = false;
+  constructor(private el: ElementRef<HTMLElement>, private zone: NgZone) {}
 
-  constructor(
-    private el: ElementRef<HTMLElement>,
-    private zone: NgZone,
-    destroyRef: DestroyRef
-  ) {
+  ngOnInit(): void {
+    const host = this.el.nativeElement;
+
     this.zone.runOutsideAngular(() => {
-      const onScroll = () => this.updateStuck();
-      this.el.nativeElement.addEventListener('scroll', onScroll, { passive: true });
-      destroyRef.onDestroy(() =>
-        this.el.nativeElement.removeEventListener('scroll', onScroll)
-      );
-    });
+      fromEvent(host, 'scroll')
+        .pipe(
+          map(() => this.isAtBottom(host)),
+          auditTime(50),
+          takeUntil(this.destroy$)
+        )
+        .subscribe((atBottom) => (this.shouldStick = atBottom));
 
-    effect(() => {
-      void this.trigger();
-      const lock = this.lock();
-      if (lock || this.isNearBottom()) this.scrollToEnd();
-    });
-  }
-
-  jumpToEnd() { this.scrollToEnd(); }
-
-  private isNearBottom(): boolean {
-    const el = this.el.nativeElement;
-    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
-    return remaining < this.threshold();
-  }
-
-  private updateStuck() {
-    const nowStuck = !this.isNearBottom();
-    if (nowStuck !== this.stuck) {
-      this.stuck = nowStuck;
-      this.autoScrollStuckChange.emit(this.stuck);
-    }
-  }
-
-  private scrollToEnd() {
-    const el = this.el.nativeElement;
-    const anchor = this.anchor();
-    this.zone.runOutsideAngular(() => {
-      requestAnimationFrame(() => {
-        if (anchor) {
-          anchor.scrollIntoView({ block: 'end', behavior: this.behavior() });
-        } else {
-          el.scrollTo({ top: el.scrollHeight, behavior: this.behavior() });
-        }
-        this.updateStuck();
+      this.mutationObs = new MutationObserver(() => {
+        if (this.shouldStick) this.scrollToBottom();
       });
+      this.mutationObs.observe(host, { childList: true, subtree: true });
+
+      if ('ResizeObserver' in window) {
+        this.resizeObs = new ResizeObserver(() => {
+          if (this.shouldStick) this.scrollToBottom();
+        });
+        this.resizeObs.observe(host);
+      }
+
+      if (this.stickOnInit) {
+        requestAnimationFrame(() => this.scrollToBottom('auto'));
+      }
     });
+  }
+
+  public scrollToBottom(behavior: ScrollBehavior | 'auto-smart' = this.scrollBehavior): void {
+    const host = this.el.nativeElement;
+    const distance = host.scrollHeight - host.clientHeight - host.scrollTop;
+    const smartBehavior: ScrollBehavior = behavior === 'auto-smart'
+      ? (distance > host.clientHeight * 2 ? 'auto' : this.scrollBehavior)
+      : (behavior as ScrollBehavior);
+
+    host.scrollTo({ top: host.scrollHeight, behavior: smartBehavior });
+  }
+
+  private isAtBottom(host: HTMLElement): boolean {
+    const distance = host.scrollHeight - host.clientHeight - host.scrollTop;
+    return distance <= this.bottomThreshold;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(); this.destroy$.complete();
+    this.mutationObs?.disconnect();
+    this.resizeObs?.disconnect();
   }
 }

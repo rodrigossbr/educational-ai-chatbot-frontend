@@ -89,6 +89,7 @@ export class ChatPage implements OnInit, OnDestroy {
         .subscribe((result) => {
           botMsg.text = result.text;
           botMsg.feedbackEnabled = result.feedbackEnabled;
+          botMsg.detectedIntent = result.detectedIntent;
         })
     );
   }

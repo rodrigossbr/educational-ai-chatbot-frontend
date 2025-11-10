@@ -3,6 +3,7 @@
 @use "../app/features/chat/chat.page/components/card-chat-msgs/components/chat-bot-msg/chat-bot-msg.theme";
 @use "../app/features/chat/chat.page/components/card-chat-msgs/components/chat-user-msg/chat-user-msg.theme";
 @use "../app/features/chat/chat.page/chat-page.theme";
+@use "../app/features/chat/chat.page/components/card-input-actions/card-input-actions.theme";
 
 
 @mixin default-theme($theme, $info-theme) {
@@ -10,6 +11,7 @@
   @include chat-bot-msg.default-theme($theme, $info-theme);
   @include chat-user-msg.default-theme($theme, $info-theme);
   @include chat-page.default-theme($theme, $info-theme);
+  @include card-input-actions.default-theme($theme, $info-theme);
 }
 
 @mixin high-contrast-theme($theme, $info-theme) {
@@ -17,4 +19,5 @@
   @include chat-bot-msg.high-contrast-theme($theme, $info-theme);
   @include chat-user-msg.high-contrast-theme($theme, $info-theme);
   @include chat-page.high-contrast-theme($theme, $info-theme);
+  @include card-input-actions.high-contrast-theme($theme, $info-theme);
 }

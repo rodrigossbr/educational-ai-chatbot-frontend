@@ -1,0 +1,90 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  .card-input-form {
+    &.is-recording {
+      .mat-mdc-form-field-focus-overlay {
+        background:  mat.get-theme-color($theme, error, 30);
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing,
+      .mdc-notched-outline__notch {
+        border-color: mat.get-theme-color($theme, neutral, 30);
+      }
+    }
+
+    .mic-btn {
+      border: 1px solid mat.get-theme-color($theme, primary, 90);;
+      background: mat.get-theme-color($theme, error, 100);
+
+      .rec-dot {
+        background: mat.get-theme-color($theme, neutral, 30);
+      }
+
+      &.recording {
+        border-color: mat.get-theme-color($theme, neutral, 30);
+        box-shadow: 0 0 0 3px mat.get-theme-color($theme, error, 90);
+
+        &::after {
+          background: mat.get-theme-color($theme, error, 30);
+        }
+      }
+    }
+  }
+
+  .rec-visual {
+    color: mat.get-theme-color($theme, neutral, 30);
+
+    .bars {
+      > span {
+        background: mat.get-theme-color($theme, neutral, 30);
+      }
+    }
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+  .card-input-form {
+    &.is-recording {
+      .mat-mdc-form-field-focus-overlay {
+        background:  mat.get-theme-color($theme, error, 100);
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing,
+      .mdc-notched-outline__notch {
+        border-color: mat.get-theme-color($theme, neutral, 100);
+      }
+    }
+
+    .mic-btn {
+      border: 1px solid mat.get-theme-color($theme, primary, 100);
+      background: mat.get-theme-color($theme, error, 100);
+
+      .rec-dot {
+        background: mat.get-theme-color($theme, neutral, 100);
+      }
+
+      &.recording {
+        border-color: mat.get-theme-color($theme, neutral, 100);
+        box-shadow: 0 0 0 3px mat.get-theme-color($theme, error, 100);
+
+        &::after {
+          background: mat.get-theme-color($theme, error, 100);
+        }
+      }
+    }
+  }
+
+  .rec-visual {
+    color: mat.get-theme-color($theme, neutral, 100);
+
+    .bars {
+      > span {
+        background: mat.get-theme-color($theme, neutral, 100);
+      }
+    }
+  }
+}

@@ -10,8 +10,6 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('educational-ai-chatbot-frontend');
-
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer

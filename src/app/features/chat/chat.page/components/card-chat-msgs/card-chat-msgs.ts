@@ -1,4 +1,14 @@
-import {Component, inject, Input, OnDestroy} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnDestroy,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {BotMessage, FeedbackService} from '@app/core';
 import {AutoScrollDirective} from '@app/shared';
 import {ChatBotMsg} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-bot-msg/chat-bot-msg';
@@ -24,7 +34,6 @@ export class CardChatMsgs implements OnDestroy {
   @Input() loading: boolean = false;
 
   private subscription: Subscription = new Subscription();
-
   private feedbackService = inject(FeedbackService);
 
   public ngOnDestroy(): void {
@@ -39,6 +48,7 @@ export class CardChatMsgs implements OnDestroy {
     const userMsgIndex = this.msgs.indexOf(msg) - 1;
     const userMsg = this.msgs[userMsgIndex];
 
+    console.log('TESTE: ', msg);
     this.subscription.add(
       this.feedbackService.sendFeedback({
         id: msg.feedbackId,
@@ -46,6 +56,7 @@ export class CardChatMsgs implements OnDestroy {
         botAnswer: msg.text,
         userQuestion: userMsg.text,
         helpful: msg.helpful,
+        detectedIntent: msg.detectedIntent
       }).subscribe(savedFeedback => {
         msg.feedbackId = savedFeedback.id
       })

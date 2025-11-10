@@ -6,7 +6,7 @@
   gap: 10px;
   max-height: 54vh;
   overflow-y: auto;
-  scroll-behavior: smooth;
+  //scroll-behavior: smooth;
 
   .user-msg {
     display: flex;
@@ -19,9 +19,6 @@
       padding: 14px 20px 14px 4px;
       border-radius: 16px;
       max-width: 68%;
-      //color: white;
-      //background-color: #2F6DF6;
-      padding: 14px 8px 14px 14px;
 
       &::after {
         content: "";
@@ -29,7 +26,6 @@
         right: -14px;
         width: 14px;
         height: 12px;
-        //background: #2F6DF6;
         border-bottom-left-radius: 12px;
         transform: rotate(310deg);
       }

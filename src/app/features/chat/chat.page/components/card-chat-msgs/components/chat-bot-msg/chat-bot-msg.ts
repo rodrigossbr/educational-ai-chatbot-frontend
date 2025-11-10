@@ -54,6 +54,7 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
 
   protected likeButtonSelect(msg: BotMessage) {
     this.msg.helpful = this.msg.helpful == true ? undefined : true;
+    console.log('likeButtonSelect', msg)
     this.likedModeChange.emit(msg);
   }
 

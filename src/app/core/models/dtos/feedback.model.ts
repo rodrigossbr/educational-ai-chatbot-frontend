@@ -4,4 +4,5 @@ export interface Feedback {
   userQuestion: string;
   botAnswer: string;
   helpful?: boolean;
+  detectedIntent?: string;
 }
