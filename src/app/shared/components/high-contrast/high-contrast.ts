@@ -2,12 +2,14 @@ import {Component, inject} from '@angular/core';
 import {ThemeEnum, ThemeService, UniqueIdService} from '@app/core';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {FocusTtsDirective} from '../../directives';
 
 @Component({
   selector: 'app-high-contrast',
   imports: [
     MatIconButton,
-    MatIcon
+    MatIcon,
+    FocusTtsDirective
   ],
   templateUrl: './high-contrast.html',
   styleUrl: './high-contrast.scss'

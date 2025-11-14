@@ -12,6 +12,10 @@
       color: mat.get-theme-color($theme, neutral, 30);
       background-color: mat.get-theme-color($theme, neutral, 80);
 
+      .info-generative-text {
+        color: mat.get-theme-color($theme, primary, 30);
+      }
+
       &::before {
         background: mat.get-theme-color($theme, neutral, 80);
       }

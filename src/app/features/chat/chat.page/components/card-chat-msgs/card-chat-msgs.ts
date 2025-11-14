@@ -48,7 +48,6 @@ export class CardChatMsgs implements OnDestroy {
     const userMsgIndex = this.msgs.indexOf(msg) - 1;
     const userMsg = this.msgs[userMsgIndex];
 
-    console.log('TESTE: ', msg);
     this.subscription.add(
       this.feedbackService.sendFeedback({
         id: msg.feedbackId,

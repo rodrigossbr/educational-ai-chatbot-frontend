@@ -13,7 +13,8 @@ export class ChatStorageService extends StateStoreService<ChatStorage> {
 
   public initialState(): ChatStorage {
     return {
-      sessionId: 0
+      sessionId: 0,
+      selectedMode: 'text',
     } as ChatStorage;
   }
 }

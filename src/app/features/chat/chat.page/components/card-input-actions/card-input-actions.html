@@ -7,8 +7,10 @@
     appearance="outline"
   >
     <input
+      appFocusTts
       formControlName="msg"
       matInput
+      aria-label="Digite sua mensagem."
       [placeholder]="activatedMic ? '🎙️ Gravando… fale que eu digito' : 'Digite sua mensagem...'"
       (keyup.enter)="sendTextMsg()"
     >
@@ -16,6 +18,7 @@
 
   <div class="card-input-form-actions">
     <button
+      appFocusTts
       matIconButton type="button"
       (mousedown)="startRecord($event)"
       (mouseup)="stopRecord($event)"
@@ -35,11 +38,14 @@
       }
     </button>
     <button
+      appFocusTts
       matIconButton
       type="button"
+      aria-label="Clique para enviar ou pressione enter."
       [disabled]="activatedMic || loading"
+      (click)="sendTextMsg()"
     >
-      <mat-icon class="material-symbols-outlined" (click)="sendTextMsg()">play_arrow</mat-icon>
+      <mat-icon class="material-symbols-outlined">play_arrow</mat-icon>
     </button>
   </div>
 </form>

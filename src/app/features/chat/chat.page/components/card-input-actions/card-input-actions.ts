@@ -17,6 +17,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {BotMessage} from '@app/core';
 import {Subscription} from 'rxjs';
 import {SpeechService} from '@core/services/speech/speech.service';
+import {FocusTtsDirective} from '@app/shared';
 
 @Component({
   selector: 'app-card-input-actions',
@@ -25,7 +26,8 @@ import {SpeechService} from '@core/services/speech/speech.service';
     MatInput,
     MatIconButton,
     MatIcon,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FocusTtsDirective
   ],
   templateUrl: './card-input-actions.html',
   styleUrl: './card-input-actions.scss'

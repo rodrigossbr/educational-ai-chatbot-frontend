@@ -18,10 +18,34 @@
 
     .msg-text {
       display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       width: fit-content;
       padding: 4px 18px 4px 4px;
       border-radius: 16px;
       max-width: 68%;
+
+      .btn-speaker {
+        margin: -16px;
+        padding: 6px;
+        height: 30px;
+        width: 30px;
+
+        mat-icon {
+          font-size: smaller;
+          margin-left: -2px;
+          margin-top: -1px;
+        }
+      }
+
+
+      .response-text {
+        margin-left: 10px;
+      }
+
+      .info-generative-text {
+        font-size: small;
+      }
 
       app-chat-loading {
         margin: 18px 6px;

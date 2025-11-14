@@ -3,7 +3,12 @@
     <mat-card-title>Chatboot inclusivo</mat-card-title>
     <div class="chat-card-header-actions">
       <app-high-contrast />
-      <button class="help-button" matButton="outlined">
+      <button
+        appFocusTts
+        class="help-button"
+        matButton="outlined"
+        aria-label="Ajuda"
+      >
         <mat-icon class="material-symbols-outlined">help</mat-icon>
       </button>
     </div>

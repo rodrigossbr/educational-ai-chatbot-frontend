@@ -7,7 +7,7 @@ import {CardModeActions, modeTypes} from './components/card-mode-actions/card-mo
 import {CardChatMsgs} from './components/card-chat-msgs/card-chat-msgs';
 import {AskText, BotMessage, ChatbootService, SessionService} from '@app/core';
 import {finalize, Subscription} from 'rxjs';
-import {HighContrast} from '@app/shared';
+import {FocusTtsDirective, HighContrast} from '@app/shared';
 import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
 import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/chat-storage.model';
 
@@ -24,7 +24,8 @@ import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/c
     CardInputActions,
     CardModeActions,
     CardChatMsgs,
-    HighContrast
+    HighContrast,
+    FocusTtsDirective
   ],
   templateUrl: './chat.page.html',
   styleUrl: './chat.page.scss'
@@ -65,7 +66,7 @@ export class ChatPage implements OnInit, OnDestroy {
   }
 
   private includeFirstMessage() {
-    if (this.state?.sessionId) {
+    if (this.state?.sessionId && !this.msgs.length) {
       this.askChatboot({
         text: 'Olá'
       });

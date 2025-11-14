@@ -17,6 +17,7 @@ import {TtsService} from '@core/services/tts/tts.service';
 import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
 import {MarkdownPipe} from '@app/shared/pipes/markdown/markdown-pipe';
 import {MatIconButton} from '@angular/material/button';
+import {FocusTtsDirective} from '@app/shared';
 
 @Component({
   selector: 'app-chat-bot-msg',
@@ -24,7 +25,8 @@ import {MatIconButton} from '@angular/material/button';
     ChatLoading,
     MatIconButton,
     MatIcon,
-    MarkdownPipe
+    MarkdownPipe,
+    FocusTtsDirective
   ],
   templateUrl: './chat-bot-msg.html',
   styleUrl: './chat-bot-msg.scss'
@@ -54,13 +56,16 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
 
   protected likeButtonSelect(msg: BotMessage) {
     this.msg.helpful = this.msg.helpful == true ? undefined : true;
-    console.log('likeButtonSelect', msg)
     this.likedModeChange.emit(msg);
   }
 
   protected unlikeButtonSelect(msg: BotMessage) {
     this.msg.helpful = this.msg.helpful == false ? undefined : false;
     this.likedModeChange.emit(msg);
+  }
+
+  protected playTextSound(msg: BotMessage) {
+    this.tts.read(msg.text);
   }
 
   private traduzir() {

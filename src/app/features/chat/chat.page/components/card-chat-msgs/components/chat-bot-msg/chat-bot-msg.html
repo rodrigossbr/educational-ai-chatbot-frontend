@@ -6,7 +6,20 @@
   @if (!loading) {
     <div>
       <div #content class="msg-text">
-        <span [innerHTML]="msg.text | markdown"></span>
+        <button
+          appFocusTts
+          class="btn-speaker"
+          matIconButton
+          type="button"
+          aria-label="Reproduzir áudio de texto"
+          (click)="playTextSound(msg)"
+        >
+          <mat-icon class="material-symbols-outlined">volume_up</mat-icon>
+        </button>
+        <span class="response-text" [innerHTML]="msg.text | markdown"></span>
+        @if(msg.detectedIntent == 'generativo' && msg.id != 0) {
+          <span class="info-generative-text">Texto gerado por IA generativa</span>
+        }
       </div>
       @if (msg.feedbackEnabled) {
         <div class="msg-actions">

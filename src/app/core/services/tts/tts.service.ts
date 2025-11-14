@@ -1,13 +1,14 @@
-import {Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
+import {inject, Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {BehaviorSubject, Subject} from 'rxjs';
+import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
 
 @Injectable({providedIn: 'root'})
 export class TtsService {
   private synth: SpeechSynthesis | null;
   voices$ = new BehaviorSubject<SpeechSynthesisVoice[]>([]);
   speaking$ = new BehaviorSubject<boolean>(false);
-  boundary$ = new Subject<number>(); // índice do caractere atual (se quiser destacar)
+  boundary$ = new Subject<number>();
   rate = 1; // 0.6–1.4 geralmente fica bom
 
   constructor(@Inject(PLATFORM_ID) pid: object, private zone: NgZone) {
@@ -18,7 +19,7 @@ export class TtsService {
       const v = this.synth!.getVoices();
       if (v && v.length) this.voices$.next(v);
     };
-    // tenta já carregar e também quando o navegador sinalizar
+
     loadVoices();
     this.synth.addEventListener?.('voiceschanged', loadVoices);
   }
@@ -50,7 +51,9 @@ export class TtsService {
     lang?: string
   }) {
     this.cancel();
-    if (!this.synth) return;
+    if (!this.synth) {
+      return;
+    }
     const chunks = this.chunk(text);
     const speakOne = (i: number) => {
       if (i >= chunks.length) {

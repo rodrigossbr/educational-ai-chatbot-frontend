@@ -1,23 +1,29 @@
 <button
-  [ngClass]="{ 'selected': mode === 'voice' }"
+  appFocusTts
+  aria-label="Habilitar leitura de tela"
   matButton="outlined"
+  [ngClass]="{ 'selected': mode === 'voice' }"
   (click)="selectMode('voice')"
 >
   <mat-icon class="material-symbols-outlined">transcribe</mat-icon>
   Voz
 </button>
 <button
-  [ngClass]="{ 'selected': mode === 'text' }"
+  appFocusTts
+  aria-label="Habilitar texto simplificado"
   matButton="outlined"
+  [ngClass]="{ 'selected': mode === 'text' }"
   (click)="selectMode('text')"
 >
   <mat-icon class="material-symbols-outlined">textsms</mat-icon>
   Texto simplificado
 </button>
 <button
+  appFocusTts
+  aria-label="Habilitar V-Libras"
   class="btn-libras"
-  [ngClass]="{ 'selected': mode === 'libras' }"
   matButton="outlined"
+  [ngClass]="{ 'selected': mode === 'libras' }"
   (click)="selectMode('libras')"
 >
   <mat-icon svgIcon="libras"></mat-icon>
