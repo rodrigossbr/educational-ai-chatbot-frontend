@@ -1,0 +1,41 @@
+<div class="dialog-header" [ngClass]="{ 'sem-subtitulo': semSubtitulo }">
+  <div class="dialog-header-title">
+    <h2 [attr.aria-label]="tituloDialogo" mat-dialog-title>
+      @if (icon) {
+        <mat-icon class="material-symbols-outlined">{{
+            icon
+          }}
+        </mat-icon>
+      }
+      {{ tituloDialogo }}
+      <div class="dialog-extra-title">
+        <ng-content select="[dialog-extra-title]"></ng-content>
+      </div>
+    </h2>
+    @if (subTituloDialogo) {
+      <p
+        class="dialog-subtitle"
+        [attr.aria-label]="subTituloDialogo"
+        [innerHTML]="subTituloDialogo"
+      ></p>
+    }
+  </div>
+  @if (botaoFecharDialogo) {
+    <button
+      mat-icon-button
+      aria-label="Fechar diálogo"
+      data-test="botao-fechar-dialogo"
+      (click)="fecharModal()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</div>
+<mat-dialog-content>
+  <div class="app-dialog-content">
+    <ng-content></ng-content>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions cdkFocusInitial>
+  <ng-content select="[dialog-actions]"></ng-content>
+</mat-dialog-actions>

@@ -1,0 +1,44 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+  .dialog-info-content {
+    .mat-mdc-dialog-container .mat-mdc-dialog-content {
+      padding: 0px 24px 0 !important;
+      margin-top: -10px;
+    }
+  }
+
+  .mdc-dialog {
+    .mat-mdc-dialog-surface {
+      border-radius: 10px;
+
+      .dialog-header {
+        .dialog-subtitle {
+          color: mat.get-theme-color($theme, neutral, 40);
+
+          h1,
+          h2,
+          h3,
+          h4 {
+            margin: 10px 0;
+          }
+        }
+      }
+    }
+  }
+
+  .medium,
+  .large,
+  .xlarge {
+    .app-dialog-panel {
+      min-width: 108vmin;
+    }
+  }
+
+  .cdk-overlay-transparent-backdrop {
+    background: transparent;
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+}

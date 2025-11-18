@@ -1,0 +1,28 @@
+<app-dialog
+  [icon]="icon"
+  [tituloDialogo]="titulo"
+  [botaoFecharDialogo]="botaoFechar"
+  [subTituloDialogo]="subTitulo"
+  [semSubtitulo]="semSubtitulo"
+>
+  @if (msgErro) {
+    <div
+      class="dialog-confirm-content-msg"
+      [innerHTML]="msgErro"
+    ></div>
+  }
+  <div class="dialog-confirm-content" [innerHTML]="msg"></div>
+  <ng-container dialog-actions>
+    <app-dialog-default-actions
+      class="actions-container"
+      (cancel)="onCancel()"
+      (confirm)="onConfirm()"
+      [btnCancel]="botaoCancelar"
+      [btnConfirm]="botaoConfirmar"
+      [btnConfirmDisabled]="desabilitarBotaoConfirmar"
+      [inverterBotoes]="inverterBotoes"
+      [showBtnConfirm]="!ocultarBotaoConfirmar"
+      [showBtnCancel]="!ocultarBotaoCancelar"
+    ></app-dialog-default-actions>
+  </ng-container>
+</app-dialog>

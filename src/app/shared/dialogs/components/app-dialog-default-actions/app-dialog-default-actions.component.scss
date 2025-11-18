@@ -1,0 +1,9 @@
+.actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  &.inverter {
+    flex-direction: row-reverse;
+  }
+}

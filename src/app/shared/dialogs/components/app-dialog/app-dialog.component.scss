@@ -1,0 +1,51 @@
+:host {
+  .sem-subtitulo {
+    max-height: 55px;
+  }
+
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+
+    .dialog-header-title {
+      h2 {
+        font-size: 20px;
+        display: flex;
+        align-items: flex-start;
+        font-weight: 600;
+        margin-top: 1.5vmin;
+        line-height: 1.4;
+
+        mat-icon {
+          padding-right: 10px;
+          padding-top: 3px;
+        }
+      }
+      .dialog-extra-title {
+        margin-left: 8px;
+      }
+
+      .dialog-subtitle {
+        font-size: 14px;
+        margin-top: -14px;
+        margin-bottom: 0;
+        padding: 0 24px;
+      }
+    }
+
+    button {
+      margin: {
+        right: 2vmin;
+        top: 2vmin;
+      }
+    }
+  }
+
+  .app-dialog-content {
+    padding-bottom: 5px;
+  }
+
+  mat-dialog-actions:empty {
+    display: none;
+  }
+}

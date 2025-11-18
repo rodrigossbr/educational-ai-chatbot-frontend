@@ -1,0 +1,33 @@
+:host {
+
+  .info-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin: 0 0 .5rem
+  }
+
+  .info-header .mat-icon {
+    color: #1f6feb
+  }
+
+  .lead {
+    margin: .25rem 0 1rem
+  }
+
+  .badge-ia {
+    font-size: small;
+  }
+
+  .sec-feedback-icons {
+    mat-icon {
+      width: 15px;
+      height: 14px;
+      font-size: medium;
+    }
+  }
+
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+  }
+}

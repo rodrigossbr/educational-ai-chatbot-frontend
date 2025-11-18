@@ -1,0 +1,11 @@
+@use '@angular/material' as mat;
+
+@mixin default-theme($theme, $info-theme) {
+
+  .badge-ia {
+    color: mat.get-theme-color($theme, primary, 30);
+  }
+}
+
+@mixin high-contrast-theme($theme, $info-theme) {
+}

@@ -8,6 +8,7 @@
         class="help-button"
         matButton="outlined"
         aria-label="Ajuda"
+        (click)="openInfoDialog()"
       >
         <mat-icon class="material-symbols-outlined">help</mat-icon>
       </button>
@@ -20,6 +21,7 @@
       [state]="state"
       [msgs]="msgs"
       [loading]="chatLoading"
+      (resendMsg)="sendMsg($event)"
     />
   </mat-card-content>
   <mat-card-footer class="chat-card-actions">

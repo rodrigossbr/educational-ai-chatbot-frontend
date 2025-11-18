@@ -1,0 +1,63 @@
+<div class="actions">
+  @if (inverterBotoes) {
+    <ng-container>
+      @if (showBtnConfirm) {
+        <button
+          [disabled]="btnConfirmDisabled"
+          (click)="onConfirm()"
+          [attr.aria-label]="btnConfirm"
+          cdkFocusInitial
+          mat-stroked-button
+          data-test="botao-confirmar"
+        >
+          @if (iconConfirm) {
+            <mat-icon>{{ iconConfirm }}</mat-icon>
+          }
+
+          {{ btnConfirm }}
+        </button>
+      }
+      @if (showBtnCancel) {
+        <button
+          [disabled]="btnCancelDisabled"
+          (click)="onCancel()"
+          [attr.aria-label]="btnCancel"
+          mat-flat-button
+          data-test="botao-cancelar"
+        >
+          {{ btnCancel }}
+        </button>
+      }
+    </ng-container>
+  }
+  @if (!inverterBotoes) {
+    <ng-container>
+      @if (showBtnCancel) {
+        <button
+          [disabled]="btnCancelDisabled"
+          (click)="onCancel()"
+          [attr.aria-label]="btnCancel"
+          mat-stroked-button
+          data-test="botao-cancelar"
+        >
+          {{ btnCancel }}
+        </button>
+      }
+      @if (showBtnConfirm) {
+        <button
+          [disabled]="btnConfirmDisabled"
+          (click)="onConfirm()"
+          [attr.aria-label]="btnConfirm"
+          cdkFocusInitial
+          mat-flat-button
+          data-test="botao-confirmar"
+        >
+          @if (iconConfirm) {
+            <mat-icon>{{ iconConfirm }}</mat-icon>
+          }
+          {{ btnConfirm }}
+        </button>
+      }
+    </ng-container>
+  }
+</div>

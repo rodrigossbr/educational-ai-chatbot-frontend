@@ -10,6 +10,7 @@ import {finalize, Subscription} from 'rxjs';
 import {FocusTtsDirective, HighContrast} from '@app/shared';
 import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
 import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/chat-storage.model';
+import {InfoDialogService} from '@app/shared/dialogs';
 
 @Component({
   selector: 'app-chat.page',
@@ -41,6 +42,7 @@ export class ChatPage implements OnInit, OnDestroy {
   private chatbootService = inject(ChatbootService);
   private sessionService = inject(SessionService);
   private chatStorageService = inject(ChatStorageService);
+  private infoDialogService = inject(InfoDialogService);
 
   ngOnInit(): void {
     this.configuresStateStore();
@@ -63,6 +65,10 @@ export class ChatPage implements OnInit, OnDestroy {
     });
 
     this.askChatboot(msg);
+  }
+
+  protected openInfoDialog() {
+    this.infoDialogService.openDialog();
   }
 
   private includeFirstMessage() {

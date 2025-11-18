@@ -1,0 +1,94 @@
+<app-dialog
+  tituloDialogo="Como o ED pode te ajudar"
+>
+  <p id="info-desc" class="lead">
+    Guia rápido de uso, acessibilidade e transparência das respostas.
+  </p>
+
+  <section aria-labelledby="sec-fazer">
+    <h3 id="sec-fazer" class="mat-subtitle-1">O que posso fazer</h3>
+    <ul>
+      <li>Buscar conteúdos de disciplinas da universidade.</li>
+      <li>Aprofundar um tópico de estudo.</li>
+      <li>Consultar informações institucionais (horários, contatos, FAQ).</li>
+      <li>Recomendar materiais educativos.</li>
+      <li>Usar <strong>IA generativa</strong> quando o tema foge do acervo.</li>
+      <li class="sec-feedback-icons">Receber seu
+          <mat-icon class="material-symbols-outlined">thumb_up</mat-icon> <mat-icon class="material-symbols-outlined">thumb_down</mat-icon>
+         para melhorar próximas respostas.
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="sec-usar">
+    <h3 id="sec-usar" class="mat-subtitle-1">Como usar</h3>
+    <ul>
+      <li>Digite sua pergunta ou use o <strong>microfone</strong>.</li>
+      <li>Ative <strong>Texto simplificado</strong> para respostas mais diretas.</li>
+      <li>Clique no <strong>ícone de áudio</strong> no balão para ouvir (TTS).</li>
+      <li>Clique em <strong>Libras</strong> para abrir o VLibras (tradução sob demanda).</li>
+      <li>O chat mantém o <em>autoscroll</em> para deixar o último balão visível.</li>
+    </ul>
+    <h4 class="mat-caption" style="margin-top:.25rem">Exemplos</h4>
+    <ul>
+      <li>“Quais disciplinas tem?”</li>
+      <li>“Aprofunde o tópico <em>mapas</em>.”</li>
+      <li>“Horários da biblioteca em São Leopoldo.”</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="sec-acess">
+    <h3 id="sec-acess" class="mat-subtitle-1">Acessibilidade</h3>
+    <ul>
+      <li><strong>Texto simplificado</strong>: linguagem mais direta.</li>
+      <li><strong>Leitor de texto (TTS)</strong>: ícone de alto-falante em cada balão.</li>
+      <li><strong>VLibras</strong>: precisa de clique (sem auto-play por política do navegador).</li>
+      <li><strong>Teclado</strong>: Tab/Shift+Tab para navegar; Enter/Espaço para acionar; <kbd>Esc</kbd> fecha diálogos.</li>
+      <li><strong>Alto contraste</strong>: alternar no cabeçalho.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="sec-transp">
+    <h3 id="sec-transp" class="mat-subtitle-1">Transparência</h3>
+    <p>Quando a resposta vier de <strong>IA generativa</strong>, exibimos o selo:</p>
+    <p><span class="badge-ia" role="note" aria-live="polite">Texto gerado por IA generativa</span></p>
+    <p>Conteúdo <strong>NLU/Institucional</strong> vem das rotas simuladas (Mockoon) e segue o acervo da universidade.</p>
+  </section>
+
+  <section aria-labelledby="sec-priv">
+    <h3 id="sec-priv" class="mat-subtitle-1">Privacidade e dados</h3>
+    <ul>
+      <li>Guardamos: <code class="mono">session_id</code>, sua pergunta, a resposta e o <strong>feedback</strong> (helpful).</li>
+      <li>Sem login e sem dados pessoais.</li>
+      <li>O feedback (anônimo) ajuda a simplificar respostas futuras e evitar intenções mal-avaliadas.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="sec-limit">
+    <h3 id="sec-limit" class="mat-subtitle-1">Limitações conhecidas</h3>
+    <ul>
+      <li><strong>VLibras</strong> não inicia automaticamente (requer gesto do usuário).</li>
+      <li><strong>TTS</strong> depende do navegador/dispositivo.</li>
+      <li class="sec-feedback-icons">A <strong>IA generativa</strong> pode errar; peça uma explicação mais simples ou envie <mat-icon class="material-symbols-outlined">thumb_down</mat-icon>.</li>
+      <li>O <strong>NLU</strong> pode classificar incorretamente em casos limite; o feedback ajuda a corrigir.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="sec-ajuda">
+    <h3 id="sec-ajuda" class="mat-subtitle-1">Ajuda e versão</h3>
+    <ul>
+      <li>Dúvidas: <a href="mailto:rodrigoss.br@gmail.com">rodrigoss.br&#64;gmail.com</a></li>
+      <li>Versão do app: <span id="app-version" class="mono">v0.1.0</span> -
+        Modelo: <span id="model-name" class="mono">Gemini&nbsp;1.5-flash</span> -
+        Ambiente: <span class="mono">Protótipo</span>
+      </li>
+    </ul>
+  </section>
+
+  <ng-container dialog-actions>
+    <app-dialog-default-actions
+      btnCancel="Entendido"
+      [showBtnConfirm]="false"
+    />
+  </ng-container>
+</app-dialog>

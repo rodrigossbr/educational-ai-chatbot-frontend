@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  inject,
-  Input,
-  OnDestroy,
-  QueryList,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnDestroy, Output} from '@angular/core';
 import {BotMessage, FeedbackService} from '@app/core';
 import {AutoScrollDirective} from '@app/shared';
 import {ChatBotMsg} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-bot-msg/chat-bot-msg';
@@ -32,6 +22,9 @@ export class CardChatMsgs implements OnDestroy {
   @Input() mode: modeTypes = 'text';
   @Input() state: ChatStorage | undefined;
   @Input() loading: boolean = false;
+  @Input() autoResendUnlike: boolean = false;
+
+  @Output() resendMsg: EventEmitter<BotMessage> = new EventEmitter();
 
   private subscription: Subscription = new Subscription();
   private feedbackService = inject(FeedbackService);
@@ -58,7 +51,17 @@ export class CardChatMsgs implements OnDestroy {
         detectedIntent: msg.detectedIntent
       }).subscribe(savedFeedback => {
         msg.feedbackId = savedFeedback.id
+        this.resendQuestion(msg);
       })
     );
+  }
+
+  private resendQuestion(msg: BotMessage): void {
+    if (this.autoResendUnlike) {
+      const index = this.msgs.indexOf(msg) - 1;
+      if (index) {
+        this.resendMsg.emit(this.msgs[index]);
+      }
+    }
   }
 }
