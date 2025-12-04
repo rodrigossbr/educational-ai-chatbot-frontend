@@ -1,16 +1,17 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {CardInputActions} from './components/card-input-actions/card-input-actions';
-import {CardModeActions, modeTypes} from './components/card-mode-actions/card-mode-actions';
+import {CardModeActions} from './components/card-mode-actions/card-mode-actions';
 import {CardChatMsgs} from './components/card-chat-msgs/card-chat-msgs';
-import {AskText, BotMessage, ChatbootService, SessionService} from '@app/core';
+import {AskText, BotMessage, ChatbootService, SessionService, VlibrasService} from '@app/core';
 import {finalize, Subscription} from 'rxjs';
-import {FocusTtsDirective, HighContrast} from '@app/shared';
+import {FocusTtsDirective, HighContrast, ObjectUtils} from '@app/shared';
 import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
 import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/chat-storage.model';
 import {InfoDialogService} from '@app/shared/dialogs';
+import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 
 @Component({
   selector: 'app-chat.page',
@@ -31,9 +32,12 @@ import {InfoDialogService} from '@app/shared/dialogs';
   templateUrl: './chat.page.html',
   styleUrl: './chat.page.scss'
 })
-export class ChatPage implements OnInit, OnDestroy {
+export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
   protected msgs: BotMessage[] = [];
-  protected mode: modeTypes = 'text';
+  protected mode: ChatModeModel = {
+    voiceEnabled: true,
+    simplifiedTextEnabled: false
+  };
   protected state?: ChatStorage;
   protected chatLoading: boolean = false;
 
@@ -43,6 +47,11 @@ export class ChatPage implements OnInit, OnDestroy {
   private sessionService = inject(SessionService);
   private chatStorageService = inject(ChatStorageService);
   private infoDialogService = inject(InfoDialogService);
+  private vlibrasService: VlibrasService = inject(VlibrasService);
+
+  ngAfterViewInit() {
+    this.vlibrasService.init().catch(console.error);
+  }
 
   ngOnInit(): void {
     this.configuresStateStore();
@@ -53,15 +62,16 @@ export class ChatPage implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  protected onModeChange(mode: modeTypes) {
-    this.mode = mode;
+  protected onModeChange(mode: ChatModeModel) {
+    this.mode = ObjectUtils.deepCopy(mode);
   }
 
   protected sendMsg(msg: AskText) {
     this.msgs.push({
       id: this.msgs.length,
       role: 'user',
-      text: msg.text
+      text: msg.text,
+      simplify: this.mode.simplifiedTextEnabled
     });
 
     this.askChatboot(msg);
@@ -71,10 +81,15 @@ export class ChatPage implements OnInit, OnDestroy {
     this.infoDialogService.openDialog();
   }
 
+  protected onOpenVlibrasChange() {
+    this.vlibrasService.openWidget();
+  }
+
   private includeFirstMessage() {
     if (this.state?.sessionId && !this.msgs.length) {
       this.askChatboot({
-        text: 'Olá'
+        text: 'Olá',
+        simplify: this.mode.simplifiedTextEnabled,
       });
     }
   }
@@ -83,7 +98,8 @@ export class ChatPage implements OnInit, OnDestroy {
     const botMsg: BotMessage = {
       id: this.msgs.length,
       role: 'bot',
-      text: ''
+      text: '',
+      simplify: this.mode.simplifiedTextEnabled
     };
     this.chatLoading = true;
     this.msgs.push(botMsg);

@@ -6,4 +6,5 @@ export interface BotMessage {
   feedbackEnabled?: boolean;
   feedbackId?: number;
   detectedIntent?: string;
+  simplify: boolean,
 }

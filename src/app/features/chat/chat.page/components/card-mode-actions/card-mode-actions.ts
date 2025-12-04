@@ -1,12 +1,11 @@
-import {Component, EventEmitter, inject, model, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, model, OnDestroy, OnInit, Output} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {NgClass} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {FocusTtsDirective} from '@app/shared';
 import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
 import {Subscription} from 'rxjs';
-
-export type modeTypes = 'voice' | 'text' | 'libras';
+import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 
 @Component({
   selector: 'app-card-mode-actions',
@@ -20,8 +19,14 @@ export type modeTypes = 'voice' | 'text' | 'libras';
   styleUrl: './card-mode-actions.scss'
 })
 export class CardModeActions implements OnInit, OnDestroy {
-  @Output() onModeChange: EventEmitter<modeTypes> = new EventEmitter<modeTypes>();
-  protected mode: modeTypes = 'text';
+
+  @Input() mode: ChatModeModel = {
+    simplifiedTextEnabled: false,
+    voiceEnabled: true
+  };
+
+  @Output() onModeChange: EventEmitter<ChatModeModel> = new EventEmitter<ChatModeModel>();
+  @Output() onOpenVlibrasChange: EventEmitter<void> = new EventEmitter<void>();
 
   protected readonly model = model;
 
@@ -33,7 +38,10 @@ export class CardModeActions implements OnInit, OnDestroy {
     this.subscription.add(
       this.chatStorageService.state$
         .subscribe((state) => {
-          this.mode = state?.selectedMode || 'text';
+          this.mode = state?.chatMode || {
+            simplifiedTextEnabled: false,
+            voiceEnabled: true
+          };
         }));
   }
 
@@ -41,9 +49,17 @@ export class CardModeActions implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  selectMode(mode: modeTypes) {
-    this.mode = mode;
-    this.chatStorageService.updatePartialState({selectedMode: mode});
-    this.onModeChange.emit(mode);
+  protected selectVoiceMode(): void {
+    this.mode.voiceEnabled = !this.mode.voiceEnabled;
+    this.onModeChange.emit(this.mode);
+  }
+
+  protected selectTextMode(): void {
+    this.mode.simplifiedTextEnabled = !this.mode.simplifiedTextEnabled;
+    this.onModeChange.emit(this.mode);
+  }
+
+  protected selectVelibrasMode(): void {
+    this.onOpenVlibrasChange.emit();
   }
 }

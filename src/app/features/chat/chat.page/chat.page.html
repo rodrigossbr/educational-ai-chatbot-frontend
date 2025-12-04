@@ -1,6 +1,6 @@
 <mat-card class="chat-card" appearance="outlined">
   <mat-card-header>
-    <mat-card-title>Chatboot inclusivo</mat-card-title>
+    <mat-card-title>Chatbot inclusivo</mat-card-title>
     <div class="chat-card-header-actions">
       <app-high-contrast />
       <button
@@ -15,7 +15,11 @@
     </div>
   </mat-card-header>
   <mat-card-content>
-    <app-card-mode-actions (onModeChange)="onModeChange($event)" />
+    <app-card-mode-actions
+      [mode]="mode"
+      (onModeChange)="onModeChange($event)"
+      (onOpenVlibrasChange)="onOpenVlibrasChange()"
+    />
     <app-card-chat-msgs
       [mode]="mode"
       [state]="state"
@@ -26,6 +30,7 @@
   </mat-card-content>
   <mat-card-footer class="chat-card-actions">
     <app-card-input-actions
+      [mode]="mode"
       [loading]="chatLoading"
       (onSendMsg)="sendMsg($event)"
     />

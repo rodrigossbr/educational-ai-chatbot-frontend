@@ -2,10 +2,10 @@ import {Component, EventEmitter, inject, Input, OnDestroy, Output} from '@angula
 import {BotMessage, FeedbackService} from '@app/core';
 import {AutoScrollDirective} from '@app/shared';
 import {ChatBotMsg} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-bot-msg/chat-bot-msg';
-import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
 import {ChatUserMsg} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-user-msg/chat-user-msg';
 import {Subscription} from 'rxjs';
 import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/chat-storage.model';
+import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 
 @Component({
   selector: 'app-card-chat-msgs',
@@ -19,7 +19,10 @@ import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/c
 })
 export class CardChatMsgs implements OnDestroy {
   @Input() msgs: BotMessage[] = [];
-  @Input() mode: modeTypes = 'text';
+  @Input() mode: ChatModeModel = {
+    simplifiedTextEnabled: false,
+    voiceEnabled: true
+  };
   @Input() state: ChatStorage | undefined;
   @Input() loading: boolean = false;
   @Input() autoResendUnlike: boolean = false;

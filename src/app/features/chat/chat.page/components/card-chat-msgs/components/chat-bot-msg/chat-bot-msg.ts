@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -12,12 +11,12 @@ import {
 } from '@angular/core';
 import {ChatLoading} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-loading/chat-loading';
 import {MatIcon} from '@angular/material/icon';
-import {BotMessage, VlibrasService} from '@app/core';
+import {BotMessage} from '@app/core';
 import {TtsService} from '@core/services/tts/tts.service';
-import {modeTypes} from '@feature/chat/chat.page/components/card-mode-actions/card-mode-actions';
 import {MarkdownPipe} from '@app/shared/pipes/markdown/markdown-pipe';
 import {MatIconButton} from '@angular/material/button';
 import {FocusTtsDirective} from '@app/shared';
+import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 
 @Component({
   selector: 'app-chat-bot-msg',
@@ -31,25 +30,22 @@ import {FocusTtsDirective} from '@app/shared';
   templateUrl: './chat-bot-msg.html',
   styleUrl: './chat-bot-msg.scss'
 })
-export class ChatBotMsg implements AfterViewInit, OnChanges {
+export class ChatBotMsg implements OnChanges {
   @Input() loading: boolean = false;
   @Input() msg!: BotMessage;
-  @Input() mode: modeTypes = 'text';
+  @Input() mode: ChatModeModel = {
+    simplifiedTextEnabled: false,
+    voiceEnabled: true
+  };
 
   @Output() likedModeChange: EventEmitter<BotMessage> = new EventEmitter();
 
   @ViewChild('content', {static: true}) private content!: ElementRef<HTMLElement>;
 
-  private vlibrasService: VlibrasService = inject(VlibrasService);
   private tts = inject(TtsService);
-
-  ngAfterViewInit() {
-    this.vlibrasService.init().catch(console.error);
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ((changes['loading'] || changes['mode']) && !this.loading) {
-      this.traduzir();
       this.read();
     }
   }
@@ -68,23 +64,15 @@ export class ChatBotMsg implements AfterViewInit, OnChanges {
     this.tts.read(msg.text);
   }
 
-  private traduzir() {
-    if (this.mode !== 'libras') {
-      return;
-    }
-
-    // const el = this.content.nativeElement;
-    // const sel = window.getSelection();
-    // const range = document.createRange();
-    // range.selectNodeContents(el);
-    // sel?.removeAllRanges();
-    // sel?.addRange(range);
-
-    this.vlibrasService.openWidget();
+  protected get textoGenerativo() {
+    return (
+      this.msg.detectedIntent == 'generativo' ||
+      this.msg.detectedIntent == 'generativo_simplificado'
+    ) && this.msg.id != 0;
   }
 
   private read() {
-    if (this.mode === 'voice' && this.msg.text) {
+    if (this.mode.voiceEnabled && this.msg.text) {
       this.tts.read(this.msg.text);
     } else {
       this.tts.cancel();

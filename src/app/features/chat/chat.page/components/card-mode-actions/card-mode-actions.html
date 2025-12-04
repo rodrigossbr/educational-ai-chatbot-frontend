@@ -2,8 +2,8 @@
   appFocusTts
   aria-label="Habilitar leitura de tela"
   matButton="outlined"
-  [ngClass]="{ 'selected': mode === 'voice' }"
-  (click)="selectMode('voice')"
+  [ngClass]="{ 'selected': mode.voiceEnabled }"
+  (click)="selectVoiceMode()"
 >
   <mat-icon class="material-symbols-outlined">transcribe</mat-icon>
   Voz
@@ -12,8 +12,8 @@
   appFocusTts
   aria-label="Habilitar texto simplificado"
   matButton="outlined"
-  [ngClass]="{ 'selected': mode === 'text' }"
-  (click)="selectMode('text')"
+  [ngClass]="{ 'selected': mode.simplifiedTextEnabled }"
+  (click)="selectTextMode()"
 >
   <mat-icon class="material-symbols-outlined">textsms</mat-icon>
   Texto simplificado
@@ -23,8 +23,7 @@
   aria-label="Habilitar V-Libras"
   class="btn-libras"
   matButton="outlined"
-  [ngClass]="{ 'selected': mode === 'libras' }"
-  (click)="selectMode('libras')"
+  (click)="selectVelibrasMode()"
 >
   <mat-icon svgIcon="libras"></mat-icon>
   Libras

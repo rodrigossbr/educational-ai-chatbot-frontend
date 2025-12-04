@@ -18,6 +18,7 @@ import {BotMessage} from '@app/core';
 import {Subscription} from 'rxjs';
 import {SpeechService} from '@core/services/speech/speech.service';
 import {FocusTtsDirective} from '@app/shared';
+import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 
 @Component({
   selector: 'app-card-input-actions',
@@ -34,6 +35,10 @@ import {FocusTtsDirective} from '@app/shared';
 })
 export class CardInputActions implements OnInit, OnChanges, OnDestroy {
   @Input() loading: boolean = false;
+  @Input() mode: ChatModeModel = {
+    simplifiedTextEnabled: false,
+    voiceEnabled: true
+  };
 
   @Output() onSendMsg: EventEmitter<BotMessage> = new EventEmitter<BotMessage>();
   protected activatedMic: boolean = false;
@@ -71,7 +76,8 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
         this.onSendMsg.emit({
           id: 0,
           role: 'user',
-          text: this.form.get('msg')?.value
+          text: this.form.get('msg')?.value,
+          simplify: this.mode.simplifiedTextEnabled
         });
       }
       this.form.reset();
@@ -83,7 +89,8 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
       this.onSendMsg.emit({
         id: 0,
         role: 'user',
-        text: this.form.get('msg')?.value
+        text: this.form.get('msg')?.value,
+        simplify: this.mode.simplifiedTextEnabled
       });
     }
     this.form.reset();

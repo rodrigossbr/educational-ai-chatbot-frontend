@@ -32,10 +32,10 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
           },
           "configurations": {
-            "production": {
+            "prod": {
               "budgets": [
                 {
                   "type": "initial",
@@ -50,14 +50,25 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
+            "dev": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "ngrock": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ngrock.ts"
                 }
               ]
             }
@@ -66,15 +77,23 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 4200,
+            "host": "0.0.0.0",
+            "allowedHosts": [".ngrok-free.app"]
+          },
           "configurations": {
-            "production": {
-              "buildTarget": "educational-ai-chatbot-frontend:build:production"
+            "prod": {
+              "buildTarget": "educational-ai-chatbot-frontend:build:prod"
             },
-            "development": {
-              "buildTarget": "educational-ai-chatbot-frontend:build:development"
+            "dev": {
+              "buildTarget": "educational-ai-chatbot-frontend:build:dev"
+            },
+            "ngrock": {
+              "buildTarget": "educational-ai-chatbot-frontend:build:ngrock"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "dev"
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"

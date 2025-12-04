@@ -17,7 +17,7 @@
           <mat-icon class="material-symbols-outlined">volume_up</mat-icon>
         </button>
         <span class="response-text" [innerHTML]="msg.text | markdown"></span>
-        @if(msg.detectedIntent == 'generativo' && msg.id != 0) {
+        @if(textoGenerativo) {
           <span class="info-generative-text">Texto gerado por IA generativa</span>
         }
       </div>
