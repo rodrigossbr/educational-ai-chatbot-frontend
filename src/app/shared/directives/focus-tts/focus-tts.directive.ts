@@ -33,7 +33,7 @@ export class FocusTtsDirective {
     if (this.selector && !el.matches(this.selector)) return;
 
     const msg = this.describe(el);
-    if (msg && this.chatStorageService.getState().chatMode.voiceEnabled) {
+    if (msg && this.chatStorageService.getState()?.chatMode?.voiceEnabled) {
       this.tts.read(msg);
     }
   }

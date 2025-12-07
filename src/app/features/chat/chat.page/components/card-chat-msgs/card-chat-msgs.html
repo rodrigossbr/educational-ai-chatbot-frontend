@@ -5,6 +5,7 @@
   @for (msg of msgs; track msg.id; let i = $index) {
     @if (msg.role == 'bot') {
       <app-chat-bot-msg
+        [userMsg]="lastUserMsg(msg)"
         [mode]="mode"
         [msg]="msg"
         [loading]="isLastLoading(msg)"

@@ -35,10 +35,7 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 })
 export class CardInputActions implements OnInit, OnChanges, OnDestroy {
   @Input() loading: boolean = false;
-  @Input() mode: ChatModeModel = {
-    simplifiedTextEnabled: false,
-    voiceEnabled: true
-  };
+  @Input() mode!: ChatModeModel;
 
   @Output() onSendMsg: EventEmitter<BotMessage> = new EventEmitter<BotMessage>();
   protected activatedMic: boolean = false;

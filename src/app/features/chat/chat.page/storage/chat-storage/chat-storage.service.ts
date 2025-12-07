@@ -8,7 +8,7 @@ import {ChatStorage} from '@feature/chat/chat.page/storage/chat-storage/models/c
 export class ChatStorageService extends StateStoreService<ChatStorage> {
 
   public constructor() {
-    super('session', 'data', {useLocalStorage: false, initialEmit: false});
+    super('session', 'data', {useLocalStorage: true, initialEmit: true});
   }
 
   public initialState(): ChatStorage {
@@ -16,7 +16,8 @@ export class ChatStorageService extends StateStoreService<ChatStorage> {
       sessionId: 0,
       chatMode: {
         simplifiedTextEnabled: false,
-        voiceEnabled: true
+        voiceEnabled: true,
+        highContrastEnabled: false
       },
     } as ChatStorage;
   }

@@ -20,11 +20,7 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 })
 export class CardModeActions implements OnInit, OnDestroy {
 
-  @Input() mode: ChatModeModel = {
-    simplifiedTextEnabled: false,
-    voiceEnabled: true
-  };
-
+  @Input() mode!: ChatModeModel;
   @Output() onModeChange: EventEmitter<ChatModeModel> = new EventEmitter<ChatModeModel>();
   @Output() onOpenVlibrasChange: EventEmitter<void> = new EventEmitter<void>();
 
@@ -40,7 +36,8 @@ export class CardModeActions implements OnInit, OnDestroy {
         .subscribe((state) => {
           this.mode = state?.chatMode || {
             simplifiedTextEnabled: false,
-            voiceEnabled: true
+            voiceEnabled: true,
+            highContrastEnabled: false
           };
         }));
   }
@@ -51,11 +48,17 @@ export class CardModeActions implements OnInit, OnDestroy {
 
   protected selectVoiceMode(): void {
     this.mode.voiceEnabled = !this.mode.voiceEnabled;
+    this.chatStorageService.updatePartialState({
+      chatMode: this.mode
+    });
     this.onModeChange.emit(this.mode);
   }
 
   protected selectTextMode(): void {
     this.mode.simplifiedTextEnabled = !this.mode.simplifiedTextEnabled;
+    this.chatStorageService.updatePartialState({
+      chatMode: this.mode
+    });
     this.onModeChange.emit(this.mode);
   }
 

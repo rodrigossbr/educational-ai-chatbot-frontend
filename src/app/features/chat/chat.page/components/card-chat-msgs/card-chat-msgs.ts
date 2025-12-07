@@ -19,10 +19,7 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 })
 export class CardChatMsgs implements OnDestroy {
   @Input() msgs: BotMessage[] = [];
-  @Input() mode: ChatModeModel = {
-    simplifiedTextEnabled: false,
-    voiceEnabled: true
-  };
+  @Input() mode!: ChatModeModel
   @Input() state: ChatStorage | undefined;
   @Input() loading: boolean = false;
   @Input() autoResendUnlike: boolean = false;
@@ -38,6 +35,10 @@ export class CardChatMsgs implements OnDestroy {
 
   protected isLastLoading(msg: BotMessage) {
     return this.loading && (this.msgs.indexOf(msg) == (this.msgs.length - 1));
+  }
+
+  protected lastUserMsg(msg: BotMessage) {
+    return this.msgs[this.msgs.indexOf(msg) - 1]
   }
 
   protected likedMode(msg: BotMessage): void {

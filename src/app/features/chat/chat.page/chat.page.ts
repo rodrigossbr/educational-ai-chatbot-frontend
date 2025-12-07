@@ -36,10 +36,12 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
   protected msgs: BotMessage[] = [];
   protected mode: ChatModeModel = {
     voiceEnabled: true,
-    simplifiedTextEnabled: false
+    simplifiedTextEnabled: false,
+    highContrastEnabled: false
   };
   protected state?: ChatStorage;
   protected chatLoading: boolean = false;
+  protected openedDialog: boolean = false;
 
   private subscription = new Subscription();
 
@@ -78,7 +80,12 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   protected openInfoDialog() {
-    this.infoDialogService.openDialog();
+    this.openedDialog = true;
+    this.subscription.add(
+      this.infoDialogService
+        .openDialog()
+        .subscribe(() => (this.openedDialog = false))
+    );
   }
 
   protected onOpenVlibrasChange() {
@@ -121,6 +128,10 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.add(
       this.chatStorageService.state$.subscribe((state) => {
         this.state = state;
+        if (!this.state) {
+          // this.chatStorageService.
+        }
+
         this.includeFirstMessage();
       })
     );
@@ -130,7 +141,7 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
     this.subscription.add(
       this.sessionService.getSession().subscribe((session) => {
         this.chatStorageService.updatePartialState({
-          sessionId: session.sessionId
+          sessionId: session.sessionId,
         });
       })
     );

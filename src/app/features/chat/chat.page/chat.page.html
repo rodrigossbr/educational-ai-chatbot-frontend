@@ -1,13 +1,13 @@
-<mat-card class="chat-card" appearance="outlined">
+<mat-card class="chat-card" appearance="outlined" appFocusTts>
   <mat-card-header>
     <mat-card-title>Chatbot inclusivo</mat-card-title>
     <div class="chat-card-header-actions">
       <app-high-contrast />
       <button
-        appFocusTts
         class="help-button"
         matButton="outlined"
         aria-label="Ajuda"
+        [attr.aria-pressed]="openedDialog"
         (click)="openInfoDialog()"
       >
         <mat-icon class="material-symbols-outlined">help</mat-icon>

@@ -1,10 +1,10 @@
 <div [attr.aria-labelledby]="contrastButtonId" class="high-contrast-button">
   <button
-    appFocusTts
     [id]="contrastButtonId"
     mat-icon-button
     color="primary"
     aria-label="Habilitar tema com alto contraste"
+    [attr.aria-pressed]="btnPressed"
     data-test="botao-contraste"
     (click)="contrastChange()"
   >

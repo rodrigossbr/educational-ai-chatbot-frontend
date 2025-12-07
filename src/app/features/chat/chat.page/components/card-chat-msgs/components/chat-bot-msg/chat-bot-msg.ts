@@ -32,11 +32,9 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 })
 export class ChatBotMsg implements OnChanges {
   @Input() loading: boolean = false;
+  @Input() userMsg!: BotMessage;
   @Input() msg!: BotMessage;
-  @Input() mode: ChatModeModel = {
-    simplifiedTextEnabled: false,
-    voiceEnabled: true
-  };
+  @Input() mode!: ChatModeModel;
 
   @Output() likedModeChange: EventEmitter<BotMessage> = new EventEmitter();
 
@@ -45,7 +43,7 @@ export class ChatBotMsg implements OnChanges {
   private tts = inject(TtsService);
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes['loading'] || changes['mode']) && !this.loading) {
+    if ((changes['loading'] || changes['msg']) && !this.loading) {
       this.read();
     }
   }
@@ -64,11 +62,18 @@ export class ChatBotMsg implements OnChanges {
     this.tts.read(msg.text);
   }
 
+  protected get ariaLabel() {
+    return this.userMsg
+      ? `Reproduzir áudio de texto da pergunta ${this.userMsg.text}`
+      : `Reproduzir áudio do chat inicial`;
+  }
+
   protected get textoGenerativo() {
-    return (
-      this.msg.detectedIntent == 'generativo' ||
-      this.msg.detectedIntent == 'generativo_simplificado'
-    ) && this.msg.id != 0;
+    return [
+      'generativo',
+      'generativo_simplificado',
+      'feedback_recovery'
+    ].includes(this.msg.detectedIntent || '') && this.msg.id != 0;
   }
 
   private read() {

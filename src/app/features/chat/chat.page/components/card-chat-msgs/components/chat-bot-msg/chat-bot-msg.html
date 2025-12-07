@@ -1,4 +1,4 @@
-<div class="bot-msg">
+<div class="bot-msg" appFocusTts>
   <span class="bot-avatar">
     <mat-icon>person</mat-icon>
   </span>
@@ -7,11 +7,10 @@
     <div>
       <div #content class="msg-text">
         <button
-          appFocusTts
           class="btn-speaker"
           matIconButton
           type="button"
-          aria-label="Reproduzir áudio de texto"
+          [attr.aria-label]="ariaLabel"
           (click)="playTextSound(msg)"
         >
           <mat-icon class="material-symbols-outlined">volume_up</mat-icon>

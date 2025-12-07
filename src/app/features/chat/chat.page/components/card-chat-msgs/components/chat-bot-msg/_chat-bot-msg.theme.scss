@@ -19,6 +19,7 @@
       &::before {
         background: mat.get-theme-color($theme, neutral, 80);
       }
+
     }
 
     .msg-actions {
@@ -43,6 +44,10 @@
 
       &::before {
         background: mat.get-theme-color($theme, neutral, 100);
+      }
+
+      .btn-speaker {
+        color: mat.get-theme-color($theme, neutral, 0);
       }
     }
   }

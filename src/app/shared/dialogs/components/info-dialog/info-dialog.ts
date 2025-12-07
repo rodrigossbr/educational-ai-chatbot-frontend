@@ -4,13 +4,15 @@ import {
   AppDialogDefaultActionsComponent
 } from '@app/shared/dialogs/components/app-dialog-default-actions/app-dialog-default-actions.component';
 import {MatIcon} from '@angular/material/icon';
+import {FocusTtsDirective} from '@app/shared';
 
 @Component({
   selector: 'app-info-dialog',
   imports: [
     AppDialogComponent,
     AppDialogDefaultActionsComponent,
-    MatIcon
+    MatIcon,
+    FocusTtsDirective
   ],
   templateUrl: './info-dialog.html',
   styleUrl: './info-dialog.scss'

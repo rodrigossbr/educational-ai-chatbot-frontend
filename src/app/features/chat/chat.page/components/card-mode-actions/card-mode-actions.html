@@ -1,6 +1,7 @@
 <button
   appFocusTts
   aria-label="Habilitar leitura de tela"
+  [attr.aria-pressed]="mode.voiceEnabled"
   matButton="outlined"
   [ngClass]="{ 'selected': mode.voiceEnabled }"
   (click)="selectVoiceMode()"
@@ -11,6 +12,7 @@
 <button
   appFocusTts
   aria-label="Habilitar texto simplificado"
+  [attr.aria-pressed]="mode.simplifiedTextEnabled"
   matButton="outlined"
   [ngClass]="{ 'selected': mode.simplifiedTextEnabled }"
   (click)="selectTextMode()"
