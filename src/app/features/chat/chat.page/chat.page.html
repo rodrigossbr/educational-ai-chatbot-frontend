@@ -31,6 +31,7 @@
   <mat-card-footer class="chat-card-actions">
     <app-card-input-actions
       [mode]="mode"
+      [msgs]="msgs"
       [loading]="chatLoading"
       (onSendMsg)="sendMsg($event)"
     />

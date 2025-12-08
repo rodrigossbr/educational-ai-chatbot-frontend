@@ -1,5 +1,5 @@
 import {
-  Component,
+  Component, ElementRef,
   EventEmitter,
   inject,
   Input,
@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges, ViewChild
 } from '@angular/core';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -36,16 +36,18 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 export class CardInputActions implements OnInit, OnChanges, OnDestroy {
   @Input() loading: boolean = false;
   @Input() mode!: ChatModeModel;
+  @Input() msgs: BotMessage[] = [];
 
   @Output() onSendMsg: EventEmitter<BotMessage> = new EventEmitter<BotMessage>();
-  protected activatedMic: boolean = false;
 
+  protected activatedMic: boolean = false;
   protected form!: FormGroup;
   private fb: FormBuilder = inject(FormBuilder);
 
   public stt: SpeechService = inject(SpeechService);
   protected hint = '';
 
+  @ViewChild('msgInput') private msgInput!: ElementRef;
   private subscription = new Subscription();
 
   ngOnInit(): void {
@@ -59,6 +61,7 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
         this.form.disable();
       } else {
         this.form.enable();
+        this.msgInput?.nativeElement.focus();
       }
     }
   }
@@ -74,7 +77,8 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
           id: 0,
           role: 'user',
           text: this.form.get('msg')?.value,
-          simplify: this.mode.simplifiedTextEnabled
+          simplify: this.mode.simplifiedTextEnabled,
+          lastMessages: this.lastMessages
         });
       }
       this.form.reset();
@@ -87,7 +91,8 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
         id: 0,
         role: 'user',
         text: this.form.get('msg')?.value,
-        simplify: this.mode.simplifiedTextEnabled
+        simplify: this.mode.simplifiedTextEnabled,
+        lastMessages: this.lastMessages
       });
     }
     this.form.reset();
@@ -144,5 +149,9 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
           this.activatedMic = listening;
         })
     );
+  }
+
+  private get lastMessages(): BotMessage[] {
+    return this.msgs.slice(-3).reverse() || [];
   }
 }

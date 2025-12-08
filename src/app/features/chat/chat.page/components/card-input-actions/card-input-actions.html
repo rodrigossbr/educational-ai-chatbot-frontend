@@ -7,7 +7,7 @@
     appearance="outline"
   >
     <input
-      appFocusTts
+      #msgInput
       formControlName="msg"
       matInput
       aria-label="Digite sua mensagem."
@@ -18,7 +18,6 @@
 
   <div class="card-input-form-actions">
     <button
-      appFocusTts
       matIconButton type="button"
       (mousedown)="startRecord($event)"
       (mouseup)="stopRecord($event)"
@@ -38,7 +37,6 @@
       }
     </button>
     <button
-      appFocusTts
       matIconButton
       type="button"
       aria-label="Clique para enviar ou pressione enter."

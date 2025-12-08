@@ -73,7 +73,8 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
       id: this.msgs.length,
       role: 'user',
       text: msg.text,
-      simplify: this.mode.simplifiedTextEnabled
+      simplify: this.mode.simplifiedTextEnabled,
+      lastMessages: []
     });
 
     this.askChatboot(msg);
@@ -105,14 +106,15 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
     const botMsg: BotMessage = {
       id: this.msgs.length,
       role: 'bot',
-      text: '',
-      simplify: this.mode.simplifiedTextEnabled
+      text: msg.text,
+      simplify: this.mode.simplifiedTextEnabled,
+      lastMessages: this.lastMessages
     };
     this.chatLoading = true;
     this.msgs.push(botMsg);
     this.subscription.add(
       this.chatbootService.chatSendText({
-        ...msg,
+        ...botMsg,
         sessionId: this.state?.sessionId,
       })
         .pipe(finalize(() => this.chatLoading = false))
@@ -124,14 +126,15 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
     );
   }
 
+  private get lastMessages(): BotMessage[] {
+    return this.msgs.slice(-3).reverse() || [];
+  }
+
   private configuresStateStore() {
     this.subscription.add(
       this.chatStorageService.state$.subscribe((state) => {
         this.state = state;
-        if (!this.state) {
-          // this.chatStorageService.
-        }
-
+        this.mode = this.state?.chatMode as ChatModeModel;
         this.includeFirstMessage();
       })
     );

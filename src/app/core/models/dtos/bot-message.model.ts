@@ -7,4 +7,5 @@ export interface BotMessage {
   feedbackId?: number;
   detectedIntent?: string;
   simplify: boolean,
+  lastMessages: BotMessage[],
 }

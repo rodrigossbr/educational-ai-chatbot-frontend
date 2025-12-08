@@ -43,7 +43,7 @@ export class ChatBotMsg implements OnChanges {
   private tts = inject(TtsService);
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes['loading'] || changes['msg']) && !this.loading) {
+    if ((changes['loading'] || changes['msg'] || changes['mode']) && !this.loading) {
       this.read();
     }
   }
