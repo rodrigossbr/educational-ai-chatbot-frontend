@@ -17,7 +17,9 @@
         </button>
         <span class="response-text" [innerHTML]="msg.text | markdown"></span>
         @if(textoGenerativo) {
-          <span class="info-generative-text">Texto gerado por IA generativa</span>
+          <span
+            class="info-generative-text"
+          >Texto gerado por IA generativa</span>
         }
       </div>
       @if (msg.feedbackEnabled) {

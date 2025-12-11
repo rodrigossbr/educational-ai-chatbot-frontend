@@ -66,6 +66,12 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
 
   protected onModeChange(mode: ChatModeModel) {
     this.mode = ObjectUtils.deepCopy(mode);
+
+    if (this.mode.simplifiedTextEnabled) {
+      const msgUsers = this.msgs.filter(m => m.role === 'user');
+      const msgSend = msgUsers[msgUsers.length - 1];
+      this.sendMsg(msgSend);
+    }
   }
 
   protected sendMsg(msg: AskText) {
@@ -117,7 +123,14 @@ export class ChatPage implements AfterViewInit, OnInit, OnDestroy {
         ...botMsg,
         sessionId: this.state?.sessionId,
       })
-        .pipe(finalize(() => this.chatLoading = false))
+        .pipe(finalize(() => {
+          this.chatLoading = false;
+          const state = this.chatStorageService.getState();
+          state.chatMode.simplifiedTextEnabled = false;
+          this.chatStorageService.updatePartialState(
+            state
+          );
+        }))
         .subscribe((result) => {
           botMsg.text = result.text;
           botMsg.feedbackEnabled = result.feedbackEnabled;

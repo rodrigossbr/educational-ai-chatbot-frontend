@@ -1,14 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  inject,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {ChatLoading} from '@feature/chat/chat.page/components/card-chat-msgs/components/chat-loading/chat-loading';
 import {MatIcon} from '@angular/material/icon';
 import {BotMessage} from '@app/core';
@@ -33,12 +23,11 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
 export class ChatBotMsg implements OnChanges {
   @Input() loading: boolean = false;
   @Input() userMsg!: BotMessage;
+  @Input() msgs: BotMessage[] = [];
   @Input() msg!: BotMessage;
   @Input() mode!: ChatModeModel;
 
   @Output() likedModeChange: EventEmitter<BotMessage> = new EventEmitter();
-
-  @ViewChild('content', {static: true}) private content!: ElementRef<HTMLElement>;
 
   private tts = inject(TtsService);
 
@@ -68,6 +57,16 @@ export class ChatBotMsg implements OnChanges {
       : `Reproduzir áudio do chat inicial`;
   }
 
+  protected get msgText() {
+    let msgText = this.msg.text;
+
+    if (this.textoGenerativo) {
+      msgText += ' Texto gerado por IA generativa';
+    }
+
+    return msgText;
+  }
+
   protected get textoGenerativo() {
     return [
       'generativo',
@@ -77,10 +76,14 @@ export class ChatBotMsg implements OnChanges {
   }
 
   private read() {
-    if (this.mode.voiceEnabled && this.msg.text) {
-      this.tts.read(this.msg.text);
+    if (this.mode.voiceEnabled && this.msgText && this.lastMsg()) {
+      this.tts.read(this.msgText);
     } else {
       this.tts.cancel();
     }
+  }
+
+  private lastMsg() {
+    return this.msgs.indexOf(this.msg) === (this.msgs.length - 1);
   }
 }

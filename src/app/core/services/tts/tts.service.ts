@@ -1,15 +1,17 @@
-import {inject, Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
+import {Inject, Injectable, NgZone, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {ChatStorageService} from '@feature/chat/chat.page/storage/chat-storage/chat-storage.service';
+import {filter, take} from 'rxjs/operators'; // <--- Importante: Adicione isso
 
 @Injectable({providedIn: 'root'})
 export class TtsService {
   private synth: SpeechSynthesis | null;
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
+
   voices$ = new BehaviorSubject<SpeechSynthesisVoice[]>([]);
   speaking$ = new BehaviorSubject<boolean>(false);
   boundary$ = new Subject<number>();
-  rate = 1; // 0.6–1.4 geralmente fica bom
+  rate = 1.4;
 
   constructor(@Inject(PLATFORM_ID) pid: object, private zone: NgZone) {
     this.synth = isPlatformBrowser(pid) ? window.speechSynthesis : null;
@@ -17,16 +19,27 @@ export class TtsService {
 
     const loadVoices = () => {
       const v = this.synth!.getVoices();
-      if (v && v.length) this.voices$.next(v);
+      if (v && v.length) {
+        this.voices$.next(v);
+      }
     };
 
     loadVoices();
-    this.synth.addEventListener?.('voiceschanged', loadVoices);
+
+    if (this.synth.onvoiceschanged !== undefined) {
+      this.synth.onvoiceschanged = loadVoices;
+    }
   }
 
   read(text: string) {
-    const voice = this.defaultPtBrVoice();
-    this.speak(text, {voice, rate: this.rate, lang: voice?.lang || 'pt-BR'});
+    this.cancel();
+    this.voices$.pipe(
+      filter(voices => voices.length > 0),
+      take(1)
+    ).subscribe(() => {
+      const voice = this.defaultPtBrVoice();
+      this.speak(text, {voice, rate: this.rate, lang: voice?.lang || 'pt-BR'});
+    });
   }
 
   pause() {
@@ -42,7 +55,6 @@ export class TtsService {
     this.speaking$.next(false);
   }
 
-  /** Lê o texto (divide em partes p/ evitar travar com textos longos) */
   private speak(text: string, opts?: {
     voice?: SpeechSynthesisVoice;
     rate?: number;
@@ -51,16 +63,20 @@ export class TtsService {
     lang?: string
   }) {
     this.cancel();
-    if (!this.synth) {
-      return;
-    }
+    if (!this.synth) return;
+
     const chunks = this.chunk(text);
+
     const speakOne = (i: number) => {
       if (i >= chunks.length) {
         this.zone.run(() => this.speaking$.next(false));
         return;
       }
+
       const u = new SpeechSynthesisUtterance(chunks[i]);
+
+      this.currentUtterance = u;
+
       if (opts?.voice) u.voice = opts.voice;
       u.lang = opts?.lang ?? opts?.voice?.lang ?? 'pt-BR';
       u.rate = opts?.rate ?? 1;
@@ -68,28 +84,40 @@ export class TtsService {
       u.volume = opts?.volume ?? 1;
 
       u.onstart = () => this.zone.run(() => this.speaking$.next(true));
-      u.onend = () => this.zone.run(() => speakOne(i + 1));
+
+      u.onend = () => {
+        this.zone.run(() => {
+          this.currentUtterance = null; // Limpa a referência
+          speakOne(i + 1);
+        });
+      };
+
+      u.onerror = (e) => {
+        console.error('Erro TTS:', e);
+        this.zone.run(() => this.speaking$.next(false));
+      };
+
       u.onboundary = (e: any) => this.zone.run(() => this.boundary$.next(e.charIndex ?? 0));
 
       this.synth!.speak(u);
     };
+
     speakOne(0);
   }
 
-  /** Tenta escolher uma voz pt-BR */
   private defaultPtBrVoice(): SpeechSynthesisVoice | undefined {
     const vs = this.voices$.value || [];
-    return vs.find(v => v.lang?.toLowerCase().startsWith('pt-br'))
-      ?? vs.find(v => v.lang?.toLowerCase().startsWith?.('pt'))
+    return vs.find(v => v.name.includes('Google') && v.lang.toLowerCase().includes('pt-br'))
+      ?? vs.find(v => v.lang.toLowerCase() === 'pt-br')
+      ?? vs.find(v => v.lang.toLowerCase().startsWith('pt'))
       ?? vs[0];
   }
 
-  /** Necessário no iOS: chamar uma vez dentro de um clique do usuário */
   unlockIOS() {
     if (!this.synth) return;
     const u = new SpeechSynthesisUtterance(' ');
     this.synth.speak(u);
-    this.synth.cancel();
+    setTimeout(() => this.synth?.cancel(), 100);
   }
 
   private chunk(t: string): string[] {

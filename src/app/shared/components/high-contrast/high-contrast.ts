@@ -32,10 +32,10 @@ export class HighContrast implements OnInit {
   ngOnInit(): void {
     this.subscription.add(
       this.chatStorageService.state$.subscribe((state) => {
-        this.selectedTheme = state?.chatMode.highContrastEnabled
+        const newTheme = state?.chatMode.highContrastEnabled
           ? ThemeEnum.highContrast
           : ThemeEnum.defaultTheme;
-        this.contrastChange();
+        this.changeTheme(newTheme);
       })
     );
   }
@@ -46,10 +46,17 @@ export class HighContrast implements OnInit {
 
   protected contrastChange(): void {
     if (this.selectedTheme == ThemeEnum.defaultTheme) {
-      this.selectedTheme = ThemeEnum.highContrast;
+      this.changeTheme(ThemeEnum.highContrast);
+    } else {
+      this.changeTheme(ThemeEnum.defaultTheme);
+    }
+  }
+
+  private changeTheme(newTheme: ThemeEnum) {
+    this.selectedTheme = newTheme;
+    if (newTheme == ThemeEnum.defaultTheme) {
       this.contrastLabel = 'Tema padrão';
     } else {
-      this.selectedTheme = ThemeEnum.defaultTheme;
       this.contrastLabel = 'Alto contraste';
     }
 
@@ -61,6 +68,6 @@ export class HighContrast implements OnInit {
         ...chatMode,
         highContrastEnabled: this.selectedTheme == ThemeEnum.highContrast
       }
-    }, { emit: false })
+    }, {emit: false});
   }
 }

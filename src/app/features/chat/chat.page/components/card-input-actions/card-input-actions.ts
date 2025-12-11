@@ -1,5 +1,6 @@
 import {
-  Component, ElementRef,
+  Component,
+  ElementRef,
   EventEmitter,
   inject,
   Input,
@@ -7,7 +8,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges, ViewChild
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -17,8 +19,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {BotMessage} from '@app/core';
 import {Subscription} from 'rxjs';
 import {SpeechService} from '@core/services/speech/speech.service';
-import {FocusTtsDirective} from '@app/shared';
 import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
+import {TtsService} from '@core/services/tts/tts.service';
 
 @Component({
   selector: 'app-card-input-actions',
@@ -27,8 +29,7 @@ import {ChatModeModel} from '@feature/chat/chat.page/models/chat-mode.model';
     MatInput,
     MatIconButton,
     MatIcon,
-    ReactiveFormsModule,
-    FocusTtsDirective
+    ReactiveFormsModule
   ],
   templateUrl: './card-input-actions.html',
   styleUrl: './card-input-actions.scss'
@@ -42,9 +43,12 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
 
   protected activatedMic: boolean = false;
   protected form!: FormGroup;
+
+  private isHoldingKey = false;
   private fb: FormBuilder = inject(FormBuilder);
 
   public stt: SpeechService = inject(SpeechService);
+  private tts = inject(TtsService);
   protected hint = '';
 
   @ViewChild('msgInput') private msgInput!: ElementRef;
@@ -100,9 +104,11 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
 
   protected startRecord(event?: Event) {
     event?.preventDefault();
-    if (this.activatedMic) {
+    this.tts.cancel();
+    if (this.activatedMic || this.isHoldingKey) {
       return;
     }
+    this.isHoldingKey = true;
 
     this.form.reset();
     if (!this.stt.supported.value) {
@@ -115,6 +121,7 @@ export class CardInputActions implements OnInit, OnChanges, OnDestroy {
 
   protected stopRecord(event?: Event) {
     event?.preventDefault();
+    this.isHoldingKey = false;
     if (!this.activatedMic) {
       return;
     }
